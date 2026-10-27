@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<modelVersion>4.0.0</modelVersion>
+
+<groupId>pacmanjava</groupId>
+<artifactId>pacman</artifactId>
+<version>1.0</version>
+
+<properties>
+<!-- Configurado para o Java 27 presente no sistema -->
+<maven.compiler.source>27</maven.compiler.source>
+<maven.compiler.target>27</maven.compiler.target>
+</properties>
+
+<dependencies>
+<dependency>
+<groupId>com.github.almasb</groupId>
+<artifactId>fxgl</artifactId>
+<version>25</version>
+</dependency>
+</dependencies>
+
+<build>
+<plugins>
+<!-- Plugin para rodar a aplicação direto pelo emulador de terminal -->
+<plugin>
+<groupId>org.codehaus.mojo</groupId>
+<artifactId>exec-maven-plugin</artifactId>
+<version>3.1.1</version>
+<configuration>
+<mainClass>com.pacmanjava.PacManApp</mainClass>
+</configuration>
+</plugin>
+</plugins>
+</build>
+</project>
