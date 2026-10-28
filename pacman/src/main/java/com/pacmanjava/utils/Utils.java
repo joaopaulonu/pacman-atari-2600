@@ -40,16 +40,16 @@ public class Utils {
     }
     
     private static abstract class AnimationComponent extends Component {
-        private static int FRAME_COUNT;
-        private static int FRAME_SIZE;
+        protected int frameCount;
+        protected int frameSize;
 
-        private AnimatedTexture texture;
+        protected AnimatedTexture texture;
 
         protected void updateTextureSize() {
-            texture.setFitWidth(FRAME_SIZE);
-            texture.setFitHeight(FRAME_SIZE);
-            texture.setTranslateX(-FRAME_SIZE / 2.0);
-            texture.setTranslateY(-FRAME_SIZE / 2.0);
+            texture.setFitWidth(frameSize);
+            texture.setFitHeight(frameSize);
+            texture.setTranslateX(-frameSize / 2.0);
+            texture.setTranslateY(-frameSize / 2.0);
         }
 
         public abstract void moveRight();
@@ -59,20 +59,19 @@ public class Utils {
     }
 
     public static class PacmanSprite extends AnimationComponent {
-        private static int FRAME_COUNT = 4;
-        private static int FRAME_SIZE = 14;
 
         private String dir = "";
 
-        private AnimatedTexture texture;
         private AnimationChannel animIdle, animEat;
 
         public PacmanSprite() {
+            frameSize = 14;
+            frameCount = 4;
             Image spriteSheet = createSprite("pacman.png").getImage();
-            int scaledFrameSize = FRAME_SIZE * SPRITE_SCALE;
+            int scaledFrameSize = frameSize * SPRITE_SCALE;
 
-            animIdle = new AnimationChannel(spriteSheet, FRAME_COUNT, scaledFrameSize, scaledFrameSize, Duration.seconds(0.3), 0, 0);
-            animEat = new AnimationChannel(spriteSheet, FRAME_COUNT, scaledFrameSize, scaledFrameSize, Duration.seconds(0.3), 0, 3);
+            animIdle = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(0.3), 0, 0);
+            animEat = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(0.3), 0, 3);
 
             texture = new AnimatedTexture(animIdle);
         }
@@ -84,13 +83,12 @@ public class Utils {
 
         @Override
         public void onUpdate(double tpf) {
-            updateTextureSize();
             if (!dir.equals("")) {
                 if (texture.getAnimationChannel() == animIdle) {
                     texture.loopAnimationChannel(animEat);
-                    updateTextureSize();
                 }
             }
+            updateTextureSize();
         }
 
         public void moveRight() {

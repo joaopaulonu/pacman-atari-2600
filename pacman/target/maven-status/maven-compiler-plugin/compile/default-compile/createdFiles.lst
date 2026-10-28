@@ -1,3 +1,4 @@
+com\pacmanjava\entidade\PacMan.class
 com\pacmanjava\utils\Utils$PacmanSprite.class
 com\pacmanjava\utils\Utils$AnimationComponent.class
 com\pacmanjava\utils\Utils.class

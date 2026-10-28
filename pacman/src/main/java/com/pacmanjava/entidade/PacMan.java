@@ -71,19 +71,19 @@ public class PacMan {
         switch(currentDirection) {
             case "RIGHT":  
                 player.translateX(speed * tpf); 
-                player.getComponent(AnimationComponent.class).moveRight(); 
+                player.getComponent(PacmanSprite.class).moveRight(); 
                 break;   
             case "LEFT": 
                 player.translateX(-speed * tpf); 
-                player.getComponent(AnimationComponent.class).moveLeft(); 
+                player.getComponent(PacmanSprite.class).moveLeft(); 
                 break;
             case "UP": 
                 player.translateY(-speed * tpf); 
-                player.getComponent(AnimationComponent.class).moveUp(); 
+                player.getComponent(PacmanSprite.class).moveUp(); 
                 break;
             case "DOWN": 
                 player.translateY(speed * tpf); 
-                player.getComponent(AnimationComponent.class).moveDown(); 
+                player.getComponent(PacmanSprite.class).moveDown(); 
                 break;
         }
 
