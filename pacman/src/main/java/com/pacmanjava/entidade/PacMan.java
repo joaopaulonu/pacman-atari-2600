@@ -3,10 +3,8 @@ package com.pacmanjava.entidade;
 import com.almasb.fxgl.entity.Entity;
 import javafx.scene.input.KeyCode;
 
-import com.pacmanjava.animacoes.AnimationComponent;
-import com.pacmanjava.PacManApp;
-
 import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.pacmanjava.utils.Utils.*;
 
 //to-do: 
 // Extender EntidadeJogo
@@ -18,9 +16,6 @@ public class PacMan {
     private static String bufferDirection = ""; //última direção presionada pelo teclado
     private static String currentDirection = ""; //direção atual do pacman
     private static Entity player;
-
-    private static final int WIDTH = PacManApp.WIDTH;
-    private static final int HEIGHT = PacManApp.HEIGHT;
 
     //verifica se a a posição passada por argumento tá dentro de um tile
     private static boolean onTile(int x, int y) {
