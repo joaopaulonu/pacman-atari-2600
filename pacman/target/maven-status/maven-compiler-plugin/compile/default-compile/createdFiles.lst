@@ -1,3 +1,4 @@
-com\pacmanjava\entidade\EntidadeJogo.class
 com\pacmanjava\entidade\PacMan.class
+com\pacmanjava\animacoes\AnimationComponent.class
+com\pacmanjava\entidade\EntidadeJogo.class
 com\pacmanjava\PacManApp.class

@@ -3,15 +3,18 @@ package com.pacmanjava;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.texture.Texture;
+import com.almasb.fxgl.texture.ImagesKt;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
 import javafx.scene.text.Text;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
 import java.util.Map;
 import com.almasb.fxgl.dsl.FXGL;
 
+import com.pacmanjava.animacoes.AnimationComponent;
 import com.pacmanjava.entidade.PacMan;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -22,6 +25,31 @@ public class PacManApp extends GameApplication {
     //resolução real: 224 x 288
     public static final int WIDTH = 240; //224 + 16
     public static final int HEIGHT = 304; //288 + 16
+    public static final int SPRITE_SCALE = 10;
+
+    public static Texture createSprite(String local) {
+        Image original = FXGL.image(local);
+        Image enlarged = ImagesKt.resize(original, (int)original.getWidth() * SPRITE_SCALE, (int)original.getHeight() * SPRITE_SCALE);
+
+        Texture sprite = new Texture(enlarged);
+        sprite.setFitWidth(original.getWidth());
+        sprite.setFitHeight(original.getHeight());
+
+        return sprite;
+    }
+
+    public static Texture createSprite(String local, double offsetX, double offsetY) {
+        Image original = FXGL.image(local);
+        Image enlarged = ImagesKt.resize(original, (int)original.getWidth() * SPRITE_SCALE, (int)original.getHeight() * SPRITE_SCALE);
+
+        Texture sprite = new Texture(enlarged);
+        sprite.setFitWidth(original.getWidth());
+        sprite.setFitHeight(original.getHeight());
+        sprite.setTranslateX(offsetX);
+        sprite.setTranslateY(offsetY);
+
+        return sprite;
+    }
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -32,6 +60,7 @@ public class PacManApp extends GameApplication {
 
         settings.setManualResizeEnabled(true);
         settings.setPreserveResizeRatio(true);
+        settings.setFullScreenAllowed(true);
     }
 
     @Override
@@ -42,7 +71,7 @@ public class PacManApp extends GameApplication {
         //visualização dos tiles (só para fazer testes de posição dos entities)
         FXGL.entityBuilder()
             .at(8, 8)
-            .view("debug tiles.png")
+            .view(createSprite("debug tiles.png"))
             .with(new IrremovableComponent())
             .zIndex(-100)
             .buildAndAttach();
@@ -51,8 +80,8 @@ public class PacManApp extends GameApplication {
         PacMan.initPacMan(
             entityBuilder()
             .at((WIDTH / 2) - 4, (HEIGHT / 2) - 4)
-            .view(new Circle(6, Color.YELLOW))
-            //.view(texture("pacman_idle.png",12,12))
+            //.view(new Circle(6, Color.YELLOW))
+            .with(new AnimationComponent())
             .buildAndAttach()
         );
     }

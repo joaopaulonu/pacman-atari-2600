@@ -2,6 +2,8 @@ package com.pacmanjava.entidade;
 
 import com.almasb.fxgl.entity.Entity;
 import javafx.scene.input.KeyCode;
+
+import com.pacmanjava.animacoes.AnimationComponent;
 import com.pacmanjava.PacManApp;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -72,10 +74,22 @@ public class PacMan {
 
         //movimentar jogador
         switch(currentDirection) {
-            case "RIGHT" -> player.translateX(speed * tpf);
-            case "LEFT" -> player.translateX(-speed * tpf);
-            case "UP" -> player.translateY(-speed * tpf);
-            case "DOWN" -> player.translateY(speed * tpf);
+            case "RIGHT":  
+                player.translateX(speed * tpf); 
+                player.getComponent(AnimationComponent.class).moveRight(); 
+                break;   
+            case "LEFT": 
+                player.translateX(-speed * tpf); 
+                player.getComponent(AnimationComponent.class).moveLeft(); 
+                break;
+            case "UP": 
+                player.translateY(-speed * tpf); 
+                player.getComponent(AnimationComponent.class).moveUp(); 
+                break;
+            case "DOWN": 
+                player.translateY(speed * tpf); 
+                player.getComponent(AnimationComponent.class).moveDown(); 
+                break;
         }
 
         //teleporta o jogador para o extremo oposto do mapa
