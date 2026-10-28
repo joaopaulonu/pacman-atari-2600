@@ -39,23 +39,35 @@ public class Utils {
         return sprite;
     }
     
-    public static class AnimationComponent extends Component{
-        private static final int FRAME_COUNT = 4;
-        private static final int FRAME_SIZE = 14;
-
-        private String dir = "";
+    private static abstract class AnimationComponent extends Component {
+        private static int FRAME_COUNT;
+        private static int FRAME_SIZE;
 
         private AnimatedTexture texture;
-        private AnimationChannel animIdle, animEat;
 
-        private void updateTextureSize() {
+        protected void updateTextureSize() {
             texture.setFitWidth(FRAME_SIZE);
             texture.setFitHeight(FRAME_SIZE);
             texture.setTranslateX(-FRAME_SIZE / 2.0);
             texture.setTranslateY(-FRAME_SIZE / 2.0);
         }
 
-        public AnimationComponent() {
+        public abstract void moveRight();
+        public abstract void moveLeft();
+        public abstract void moveUp();
+        public abstract void moveDown();
+    }
+
+    public static class PacmanSprite extends AnimationComponent {
+        private static int FRAME_COUNT = 4;
+        private static int FRAME_SIZE = 14;
+
+        private String dir = "";
+
+        private AnimatedTexture texture;
+        private AnimationChannel animIdle, animEat;
+
+        public PacmanSprite() {
             Image spriteSheet = createSprite("pacman.png").getImage();
             int scaledFrameSize = FRAME_SIZE * SPRITE_SCALE;
 

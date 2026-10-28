@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import java.util.Map;
-import com.almasb.fxgl.dsl.FXGL;
 import com.pacmanjava.entidade.PacMan;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -35,7 +34,7 @@ public class PacManApp extends GameApplication {
         getGameScene().setBackgroundColor(Color.BLACK);
         
         //visualização dos tiles (só para fazer testes de posição dos entities)
-        FXGL.entityBuilder()
+        entityBuilder()
             .at(8, 8)
             .view(createSprite("debug tiles.png"))
             .with(new IrremovableComponent())
@@ -47,7 +46,7 @@ public class PacManApp extends GameApplication {
             entityBuilder()
             .at((WIDTH / 2) - 4, (HEIGHT / 2) - 4)
             //.view(new Circle(6, Color.YELLOW))
-            .with(new AnimationComponent())
+            .with(new PacmanSprite())
             .buildAndAttach()
         );
     }
@@ -64,21 +63,21 @@ public class PacManApp extends GameApplication {
         rect1.setFill(Color.TRANSPARENT);
         rect1.setStroke(Color.BLACK);
         rect1.setStrokeWidth(16);
-        FXGL.getGameScene().addUINode(rect1);
+        getGameScene().addUINode(rect1);
 
         //visualizador de fps (só para testar o desempenho do jogo)
         Text text = new Text("FPS ");
         text.setTranslateX(0);
         text.setTranslateY(10);
         text.setFill(Color.WHITE);
-        FXGL.getGameScene().addUINode(text);
+        getGameScene().addUINode(text);
 
         Text textFPS = new Text();
         textFPS.setTranslateX(25);
         textFPS.setTranslateY(10);
         textFPS.setFill(Color.WHITE);
-        textFPS.textProperty().bind(FXGL.getWorldProperties().intProperty("fps").asString());
-        FXGL.getGameScene().addUINode(textFPS);
+        textFPS.textProperty().bind(getWorldProperties().intProperty("fps").asString());
+        getGameScene().addUINode(textFPS);
     }
 
     @Override
