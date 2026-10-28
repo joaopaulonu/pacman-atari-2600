@@ -1,22 +1,24 @@
 package com.pacmanjava.utils;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.texture.ImagesKt;
 import com.almasb.fxgl.texture.Texture;
 import javafx.util.Duration;
-
+import javafx.scene.input.KeyCode;
 import javafx.scene.image.Image;
+
+import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class Utils {
     public static final int WIDTH = 240; //224 + 16
     public static final int HEIGHT = 304; //288 + 16
     public static final int SPRITE_SCALE = 10;
+    public static String inputBufferDirection = "";
 
     public static Texture createSprite(String local) {
-        Image original = FXGL.image(local);
+        Image original = image(local);
         Image enlarged = ImagesKt.resize(original, (int)original.getWidth() * SPRITE_SCALE, (int)original.getHeight() * SPRITE_SCALE);
 
         Texture sprite = new Texture(enlarged);
@@ -27,7 +29,7 @@ public class Utils {
     }
 
     public static Texture createSprite(String local, double offsetX, double offsetY) {
-        Image original = FXGL.image(local);
+        Image original = image(local);
         Image enlarged = ImagesKt.resize(original, (int)original.getWidth() * SPRITE_SCALE, (int)original.getHeight() * SPRITE_SCALE);
 
         Texture sprite = new Texture(enlarged);
@@ -37,6 +39,22 @@ public class Utils {
         sprite.setTranslateY(offsetY);
 
         return sprite;
+    }
+
+    //adiciona e cria as interações dos controles do jogo
+    public static void initMovement() {
+        onKey(KeyCode.RIGHT, () -> {
+            inputBufferDirection = "RIGHT";
+        });
+        onKey(KeyCode.LEFT, () -> {
+            inputBufferDirection = "LEFT";
+        });
+        onKey(KeyCode.UP, () -> {
+            inputBufferDirection = "UP";
+        });
+        onKey(KeyCode.DOWN, () -> {
+            inputBufferDirection = "DOWN";
+        });
     }
     
     private static abstract class AnimationComponent extends Component {

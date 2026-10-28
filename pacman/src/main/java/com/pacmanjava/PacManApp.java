@@ -16,6 +16,8 @@ import static com.pacmanjava.utils.Utils.*;
 
 //arquivo principal
 public class PacManApp extends GameApplication {
+    private static PacMan pacman;
+
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setWidth(WIDTH);
@@ -42,10 +44,9 @@ public class PacManApp extends GameApplication {
             .buildAndAttach();
 
         //criação do player
-        PacMan.initPacMan(
+        pacman = new PacMan(
             entityBuilder()
             .at((WIDTH / 2) - 4, (HEIGHT / 2) - 4)
-            //.view(new Circle(6, Color.YELLOW))
             .with(new PacmanSprite())
             .buildAndAttach()
         );
@@ -53,7 +54,7 @@ public class PacManApp extends GameApplication {
 
     @Override
     protected void initInput() {
-        PacMan.initMovementKeys();
+        initMovement();
     }
 
     @Override
@@ -89,7 +90,7 @@ public class PacManApp extends GameApplication {
 
     @Override
     protected void onUpdate(double tpf) {
-        PacMan.handleMovement(tpf);
+        pacman.handleMovement(tpf);
 
         //atualiza os fps
         frames += tpf;
