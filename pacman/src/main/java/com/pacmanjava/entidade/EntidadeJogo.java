@@ -7,12 +7,12 @@ import static com.pacmanjava.utils.Utils.*;
 public abstract class EntidadeJogo {
     protected int posX;
     protected int posY;
-    protected double speed = 60;
+    protected double speed;
     protected String bufferDirection = ""; //seguinte direcao guardada
     protected String currentDirection = ""; //direcao atual de movimento
     protected Entity entity;
 
-    //verifica se a a posição passada por argumento tá dentro de um tile
+    //verifica se a entidade tá dentro de um tile
     protected boolean onTile() {
         //um tile == 8 pixels
         float posTilesX = (float)(posX - 4) / 8;
@@ -28,7 +28,7 @@ public abstract class EntidadeJogo {
     } 
 
     protected void handleBoundaries() {
-        //teleporta o jogador para o extremo oposto do mapa
+        //teleporta a entidade para o extremo oposto do mapa
         if (Math.floorMod(posX, WIDTH) != posX) { 
             entity.setX(Math.floorMod(posX, WIDTH));
         }

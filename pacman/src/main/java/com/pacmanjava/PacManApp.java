@@ -2,21 +2,21 @@ package com.pacmanjava;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.entity.components.IrremovableComponent;
-import javafx.scene.text.Text;
-import javafx.geometry.Point2D;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import java.util.Map;
 import com.pacmanjava.entidade.PacMan;
+import com.almasb.fxgl.entity.Entity;
+
+import com.pacmanjava.utils.Debug;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
 
-//arquivo principal
 public class PacManApp extends GameApplication {
     private static PacMan pacman;
+    private static Entity red, pink, orange, cyan;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -28,33 +28,50 @@ public class PacManApp extends GameApplication {
         settings.setManualResizeEnabled(true);
         settings.setPreserveResizeRatio(true);
         settings.setFullScreenAllowed(true);
+        Debug.showFps();
     }
 
     @Override
     protected void initGame() {
         //cor do background
         getGameScene().setBackgroundColor(Color.BLACK);
-        
-        //visualização dos tiles (só para fazer testes de posição dos entities)
-        entityBuilder()
-            .at(8, 8)
-            .view(createSprite("debug tiles.png"))
-            .with(new IrremovableComponent())
-            .zIndex(-100)
+        //criação do player
+        pacman = new PacMan();
+        red = entityBuilder()
+            .at((WIDTH / 2) + 20, (HEIGHT / 2) + 12)
+            .with(new GhostSprite(Color.RED))
+            .buildAndAttach();
+        pink = entityBuilder()
+            .at((WIDTH / 2) + 4, (HEIGHT / 2) + 12)
+            .with(new GhostSprite(Color.PINK))
+            .buildAndAttach();
+        orange = entityBuilder()
+            .at((WIDTH / 2) - 12, (HEIGHT / 2) + 12)
+            .with(new GhostSprite(Color.ORANGE))
+            .buildAndAttach();
+        cyan = entityBuilder()
+            .at((WIDTH / 2) - 28, (HEIGHT / 2) + 12)
+            .with(new GhostSprite(Color.CYAN))
             .buildAndAttach();
 
-        //criação do player
-        pacman = new PacMan(
-            entityBuilder()
-            .at((WIDTH / 2) - 4, (HEIGHT / 2) - 4)
-            .with(new PacmanSprite())
-            .buildAndAttach()
-        );
+        Debug.viewLevelTiles();
     }
 
+    //adiciona e cria as interações dos controles do jogo
     @Override
     protected void initInput() {
-        initMovement();
+        onKey(KeyCode.RIGHT, () -> {
+            setInputBufferDirection("RIGHT");
+        });
+        onKey(KeyCode.LEFT, () -> {
+            setInputBufferDirection("LEFT");
+        });
+        onKey(KeyCode.UP, () -> {
+            setInputBufferDirection("UP");
+        });
+        onKey(KeyCode.DOWN, () -> {
+            setInputBufferDirection("DOWN");
+        });
     }
 
     @Override
@@ -66,19 +83,7 @@ public class PacManApp extends GameApplication {
         rect1.setStrokeWidth(16);
         getGameScene().addUINode(rect1);
 
-        //visualizador de fps (só para testar o desempenho do jogo)
-        Text text = new Text("FPS ");
-        text.setTranslateX(0);
-        text.setTranslateY(10);
-        text.setFill(Color.WHITE);
-        getGameScene().addUINode(text);
-
-        Text textFPS = new Text();
-        textFPS.setTranslateX(25);
-        textFPS.setTranslateY(10);
-        textFPS.setFill(Color.WHITE);
-        textFPS.textProperty().bind(getWorldProperties().intProperty("fps").asString());
-        getGameScene().addUINode(textFPS);
+        Debug.initFpsUI();
     }
 
     @Override
@@ -86,18 +91,15 @@ public class PacManApp extends GameApplication {
         vars.put("fps", 0);
     }
 
-    private static double frames = 1;
-
     @Override
     protected void onUpdate(double tpf) {
         pacman.handleMovement(tpf);
 
-        //atualiza os fps
-        frames += tpf;
-        if ((int) frames % 2 == 0) {
-            set("fps", (int)(1 / tpf));
-            frames = 1;
-        }
+        Debug.updateFps(tpf);
+        Debug.cycleGhostAnimationChannels(red.getComponent(GhostSprite.class), 10, tpf);
+        Debug.cycleGhostAnimationChannels(pink.getComponent(GhostSprite.class), 10, tpf);
+        Debug.cycleGhostAnimationChannels(orange.getComponent(GhostSprite.class), 10, tpf);
+        Debug.cycleGhostAnimationChannels(cyan.getComponent(GhostSprite.class), 10, tpf);
     }
 
     public static void main(String[] args) {

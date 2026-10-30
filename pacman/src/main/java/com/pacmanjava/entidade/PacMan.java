@@ -2,13 +2,18 @@ package com.pacmanjava.entidade;
 
 import com.almasb.fxgl.entity.Entity;
 
+import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
 
 public class PacMan extends EntidadeJogo {
 
-    //coloca o player criado no PacManApp na variável player
-    public PacMan(Entity entity) {
-        this.entity = entity;
+    //coloca o player criado no PacManApp na variável entity
+    public PacMan() {
+        this.entity = entityBuilder()
+            .at((WIDTH / 2) - 4, (HEIGHT / 2) - 4)
+            .with(new PacmanSprite())
+            .buildAndAttach();
+        speed = 60;
     }
 
     //maneja o movimento do jogador (movimentação e teleportagem nos extremos)
@@ -16,13 +21,13 @@ public class PacMan extends EntidadeJogo {
         posX = (int) entity.getPosition().getX();
         posY = (int) entity.getPosition().getY();
 
-        bufferDirection = inputBufferDirection;
+        bufferDirection = getInputBufferDirection();
 
         //atualiza a direção do jogador
         if (onTile() && currentDirection != bufferDirection) {
             currentDirection = bufferDirection;
             
-            //teleporta para exatamente o centro do tile
+            //alinha exatamente no centro do tile
             entity.setX(posX);
             entity.setY(posY);
         }
