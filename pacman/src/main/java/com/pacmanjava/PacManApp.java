@@ -54,6 +54,8 @@ public class PacManApp extends GameApplication {
             .with(new GhostSprite(Color.CYAN))
             .buildAndAttach();
 
+        getGameWorld().setLevelFromMap("maporiginal.json");
+
         Debug.viewLevelTiles();
     }
 
