@@ -8,7 +8,11 @@ import javafx.scene.shape.Rectangle;
 import java.util.Map;
 import com.pacmanjava.entidade.PacMan;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.level.text.TextLevelLoader;
+import com.almasb.fxgl.entity.level.Level;
 
+import com.pacmanjava.map.Lvl;
+import com.pacmanjava.map.PacManEntityFactory;
 import com.pacmanjava.utils.Debug;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -33,6 +37,14 @@ public class PacManApp extends GameApplication {
 
     @Override
     protected void initGame() {
+        getGameWorld().addEntityFactory(new PacManEntityFactory());
+
+        // the level file "tilemap.txt" is located under assets/levels/
+        Level level = getAssetLoader().loadLevel("tilemap.txt", new TextLevelLoader(8, 8, '0'));
+        Lvl.createLevelMatrix("tilemap.txt");
+
+        getGameWorld().setLevel(level);
+
         //cor do background
         getGameScene().setBackgroundColor(Color.BLACK);
         //criação do player
@@ -53,8 +65,6 @@ public class PacManApp extends GameApplication {
             .at((WIDTH / 2) - 28, (HEIGHT / 2) + 12)
             .with(new GhostSprite(Color.CYAN))
             .buildAndAttach();
-
-        getGameWorld().setLevelFromMap("maporiginal.json");
 
         Debug.viewLevelTiles();
     }

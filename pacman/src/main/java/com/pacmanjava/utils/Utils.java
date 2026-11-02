@@ -14,7 +14,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class Utils {
     public static final int WIDTH = 240; //224 + 16
     public static final int HEIGHT = 304; //288 + 16
-    public static final int UPSCALE_FACTOR = 10;
+    private static final int UPSCALE_FACTOR = 10;
 
     private static String inputBufferDirection = "";
 
@@ -67,16 +67,18 @@ public class Utils {
 
     public static class PacmanSprite extends AnimationComponent {
         private String dir = "";
-        private AnimationChannel animIdle, animEat;
+        private boolean dying = false;
+        private AnimationChannel animIdle, animEat, animDying;
 
         public PacmanSprite() {
             frameSize = 14;
-            frameCount = 4;
+            frameCount = 15;
             spriteSheet = createSprite("pacman.png").getImage();
             scaledFrameSize = frameSize * UPSCALE_FACTOR;
 
             animIdle = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(1), 0, 0);
             animEat = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(0.3), 0, 3);
+            animDying = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(2), 3, 14);
 
             texture = new AnimatedTexture(animIdle);
         }
@@ -88,6 +90,14 @@ public class Utils {
 
         @Override
         public void onUpdate(double tpf) {
+            if (dying) {
+                if (texture.getAnimationChannel() != animDying) {
+                    texture.loopAnimationChannel(animDying);
+                }
+                updateTextureSize(texture);
+                return;
+            }
+
             if (!dir.equals("")) {
                 if (texture.getAnimationChannel() != animEat) {
                     texture.loopAnimationChannel(animEat);
@@ -97,6 +107,7 @@ public class Utils {
                     texture.loopAnimationChannel(animIdle);
                 }
             }
+
             updateTextureSize(texture);
         }
 
@@ -118,6 +129,21 @@ public class Utils {
         public void moveDown() {
             dir = "DOWN";
             getEntity().setRotation(90);
+        }
+
+        public void idle() {
+            dir = "";
+            getEntity().setRotation(0);
+        }
+
+        public void dying() {
+            dying = true;
+            getEntity().setRotation(-90);
+        }
+
+        public void dead() {
+            dying = false;
+            texture.setOpacity(0.0);
         }
     }
 
