@@ -39,7 +39,6 @@ public class PacManApp extends GameApplication {
     protected void initGame() {
         //getGameWorld().addEntityFactory(new PacManEntityFactory());
 
-        // the level file "tilemap.txt" is located under assets/levels/
        // Level level = getAssetLoader().loadLevel("tilemap.txt", new TextLevelLoader(8, 8, '0'));
         Lvl.createLevelMatrix("tilemap.txt");
 
@@ -50,19 +49,19 @@ public class PacManApp extends GameApplication {
         //criação do player
         pacman = new PacMan();
         red = entityBuilder()
-            .at((WIDTH / 2) + 20, (HEIGHT / 2) + 12)
+            .at((WIDTH / 2), (HEIGHT / 2) - 28)
             .with(new GhostSprite(Color.RED))
             .buildAndAttach();
         pink = entityBuilder()
-            .at((WIDTH / 2) + 4, (HEIGHT / 2) + 12)
+            .at((WIDTH / 2), (HEIGHT / 2) - 4)
             .with(new GhostSprite(Color.PINK))
             .buildAndAttach();
         orange = entityBuilder()
-            .at((WIDTH / 2) - 12, (HEIGHT / 2) + 12)
+            .at((WIDTH / 2) + 16, (HEIGHT / 2) - 4)
             .with(new GhostSprite(Color.ORANGE))
             .buildAndAttach();
         cyan = entityBuilder()
-            .at((WIDTH / 2) - 28, (HEIGHT / 2) + 12)
+            .at((WIDTH / 2) - 16, (HEIGHT / 2) - 4)
             .with(new GhostSprite(Color.CYAN))
             .buildAndAttach();
 
