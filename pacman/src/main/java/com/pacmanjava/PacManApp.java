@@ -1,30 +1,15 @@
 package com.pacmanjava;
 
-import com.almasb.fxgl.animation.Animation;
-import com.almasb.fxgl.core.util.EmptyRunnable;
-import javafx.beans.binding.Bindings;
-import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
-import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
-import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.app.scene.SceneFactory;
-import com.almasb.fxgl.dsl.FXGL;
-import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import java.util.Map;
 import com.pacmanjava.entidade.PacMan;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.level.text.TextLevelLoader;
-import com.almasb.fxgl.ui.FontType;
-import com.almasb.fxgl.entity.level.Level;
-
 import com.pacmanjava.ui.MainMenu;
 import com.pacmanjava.map.Lvl;
 //import com.pacmanjava.map.PacManEntityFactory;
@@ -47,7 +32,7 @@ public class PacManApp extends GameApplication {
         settings.setMainMenuEnabled(true);
         settings.setSceneFactory(new SceneFactory() {
             @Override
-            public FXGLMenu newGameMenu() {
+            public FXGLMenu newMainMenu() {
                 return new MainMenu();
             }
         });
