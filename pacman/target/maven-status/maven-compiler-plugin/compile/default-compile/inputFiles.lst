@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 C:\dev\pucc\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\entidade\EntidadeJogo.java
 C:\dev\pucc\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\entidade\PacMan.java
 C:\dev\pucc\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\map\Lvl.java
@@ -7,13 +6,3 @@ C:\dev\pucc\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\PacManApp.java
 C:\dev\pucc\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\ui\MainMenu.java
 C:\dev\pucc\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\utils\Debug.java
 C:\dev\pucc\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\utils\Utils.java
-=======
-C:\Users\rcalosena\Documents\GitHub\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\entidade\EntidadeJogo.java
-C:\Users\rcalosena\Documents\GitHub\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\entidade\PacMan.java
-C:\Users\rcalosena\Documents\GitHub\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\map\Lvl.java
-C:\Users\rcalosena\Documents\GitHub\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\map\PacManEntityFactory.java
-C:\Users\rcalosena\Documents\GitHub\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\PacManApp.java
-C:\Users\rcalosena\Documents\GitHub\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\ui\MainMenu.java
-C:\Users\rcalosena\Documents\GitHub\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\utils\Debug.java
-C:\Users\rcalosena\Documents\GitHub\pacman-atari-2600\pacman\src\main\java\com\pacmanjava\utils\Utils.java
->>>>>>> c34b739a504fedb2b3596781eabefffcf1ed7e37

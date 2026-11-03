@@ -23,13 +23,15 @@ public class MainMenu extends FXGLMenu {
 
         var background = createSprite("menuimage.png");
 
+        background.setTranslateY(75);
+
         background.setFitHeight(background.getFitHeight()-5);
-        background.setFitWidth(background.getFitWidth()-5);
+        background.setFitWidth(background.getFitWidth()-30);
 
         btnJogar = createSprite("pressimage.png");
 
-        btnJogar.setTranslateX(30);
-        btnJogar.setTranslateY(120);
+        btnJogar.setTranslateX(60);
+        btnJogar.setTranslateY(180);
 
         btnJogar.setOnMouseClicked(event -> fireNewGame());
 
