@@ -13,7 +13,7 @@ public class PacMan extends EntidadeJogo {
     //coloca o player criado no PacManApp na variável entity
     public PacMan() {
         this.entity = entityBuilder()
-            .at((WIDTH / 2) - 4, (HEIGHT / 2) + 68)
+            .at((WIDTH / 2), (HEIGHT / 2) + 68)
             .with(new PacmanSprite())
             .buildAndAttach();
         speed = 60;
@@ -54,7 +54,7 @@ public class PacMan extends EntidadeJogo {
         bufferDirection = getInputBufferDirection();
 
         //atualiza a direção do jogador
-        if (onTile() && currentDirection != bufferDirection && getTileInFront(bufferDirection) == 0) {
+        if ((onTile() || currentDirection.equals("")) && currentDirection != bufferDirection && getTileInFront(bufferDirection) == 0) {
             currentDirection = bufferDirection;
             
             //alinha exatamente no centro do tile
