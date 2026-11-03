@@ -5,6 +5,7 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.core.util.EmptyRunnable;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
@@ -12,6 +13,8 @@ import static com.pacmanjava.utils.Utils.*;
 
 public class MainMenu extends FXGLMenu {
     private Animation<?> animation;
+
+    private Texture btnJogar;
 
     public MainMenu() {
         super(MenuType.MAIN_MENU);
@@ -23,32 +26,33 @@ public class MainMenu extends FXGLMenu {
         background.setFitHeight(background.getFitHeight()-5);
         background.setFitWidth(background.getFitWidth()-5);
 
-        var btnJogar = FXGL.texture("pressimage.png");
+        btnJogar = createSprite("pressimage.png");
 
-        btnJogar.setTranslateX(20);
+        btnJogar.setTranslateX(30);
         btnJogar.setTranslateY(120);
 
         btnJogar.setOnMouseClicked(event -> fireNewGame());
 
         getContentRoot().getChildren().addAll(bg, background, btnJogar);
 
-        animation = FXGL.animationBuilder()
-        .duration(Duration.seconds(2))
-        .fade(btnJogar)       
-        .from(0.0)            
-        .to(1.0)              
-        .build();
+
     }
 
-    @Override
-    public void onCreate() {
-        animation.setOnFinished(EmptyRunnable.INSTANCE);
-        animation.stop();
-        animation.start();
-    }
+    double count = 0;
+    double dec = 1;
 
     @Override
     protected void onUpdate(double tpf) {
-        animation.onUpdate(tpf);
+        count = (count + tpf) % 2;
+
+        if (count <= 1) {
+            btnJogar.setOpacity(count);
+        } else {
+            if (dec <= 0) {
+                dec = 1;
+            }
+            dec = (dec - tpf);
+            btnJogar.setOpacity(dec);
+        }
     }
 }
