@@ -40,7 +40,7 @@ public class MainMenu extends FXGLMenu {
         getContentRoot().getChildren().addAll(bg, background, btnJogar);
 
         animation = FXGL.animationBuilder()
-        .duration(Duration.seconds(1))
+        .duration(Duration.seconds(0.8))
         .scale(btnJogar) // Exemplo: animando o botão
         .from(new Point2D(0, 0))
         .to(new Point2D(1, 1))
