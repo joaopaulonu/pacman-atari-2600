@@ -20,30 +20,23 @@ public class MainMenu extends FXGLMenu {
 
         var background = createSprite("menuimage.png");
 
-        background.setFitHeight(background.getFitHeight() - 20);
-        background.setFitWidth(background.getFitWidth() - 20);
+        background.setFitHeight(background.getFitHeight()-5);
+        background.setFitWidth(background.getFitWidth()-5);
 
-        background.setTranslateX(-20);
-        background.setTranslateY(100);
+        var btnJogar = FXGL.texture("pressimage.png");
 
-        var btnJogar = new javafx.scene.control.Button("PRESS START");
-        btnJogar.setStyle("-fx-background-color: black; -fx-text-fill: white; " +
-                  "-fx-font-size: 24px; -fx-font-weight: bold; " +
-                  "-fx-border-color: none; -fx-border-width: 3px; " +
-                  "-fx-cursor: hand;");
+        btnJogar.setTranslateX(20);
+        btnJogar.setTranslateY(120);
 
-        btnJogar.setTranslateX(-20);
-        btnJogar.setTranslateY(150);
-
-        btnJogar.setOnAction(event -> fireNewGame());
+        btnJogar.setOnMouseClicked(event -> fireNewGame());
 
         getContentRoot().getChildren().addAll(bg, background, btnJogar);
 
         animation = FXGL.animationBuilder()
-        .duration(Duration.seconds(1))
-        .scale(btnJogar) // Exemplo: animando o botão
-        .from(new Point2D(0, 0))
-        .to(new Point2D(1, 1))
+        .duration(Duration.seconds(2))
+        .fade(btnJogar)       
+        .from(0.0)            
+        .to(1.0)              
         .build();
     }
 
