@@ -68,6 +68,8 @@ public class PacManApp extends GameApplication {
         //Debug.viewLevelTiles();
 
         Lvl.viewMap();
+
+        pacman.setDead(true);
     }
 
     //adiciona e cria as interações dos controles do jogo
