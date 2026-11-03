@@ -1,24 +1,4 @@
-/*
-
-import com.almasb.fxgl.entity.*;
-import com.almasb.fxgl.physics.BoundingShape;
-import com.almasb.fxgl.physics.HitBox;
-import com.almasb.fxgl.physics.PhysicsComponent;
-
-public class Level implements EntityFactory {
-    
-    @Spawns("wall")
-    public Entity newWall(SpawnData data){
-        return Entities.builder()
-                .from(data)
-                .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
-                .with(new PhysicsComponent())
-                .build();
-    }
-}
-*/
-
-package com.pacmanjava.map;
+/*package com.pacmanjava.map;
 
 import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
 import com.almasb.fxgl.dsl.components.KeepOnScreenComponent;
@@ -61,4 +41,4 @@ public class PacManEntityFactory implements EntityFactory {
                 .view(new Rectangle(8, 8, Color.WHITE))
                 .build();
     }
-}
+}*/

@@ -1,9 +1,13 @@
 package com.pacmanjava.map;
 
 import java.util.Scanner;
+
+import com.almasb.fxgl.entity.components.IrremovableComponent;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import static com.pacmanjava.utils.Utils.*;
 
 public class Lvl {
@@ -25,5 +29,14 @@ public class Lvl {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void viewMap() {
+        entityBuilder()
+            .at(0, 0)
+            .view(createSprite("maporiginal.png"))
+            .with(new IrremovableComponent())
+            .zIndex(-10)
+            .buildAndAttach();
     }
 }

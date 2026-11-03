@@ -5,6 +5,5 @@ com\pacmanjava\utils\Utils$AnimationComponent.class
 com\pacmanjava\utils\Utils.class
 com\pacmanjava\entidade\EntidadeJogo.class
 com\pacmanjava\map\Lvl.class
-com\pacmanjava\map\PacManEntityFactory.class
 com\pacmanjava\utils\Debug.class
 com\pacmanjava\PacManApp.class

@@ -12,7 +12,7 @@ import com.almasb.fxgl.entity.level.text.TextLevelLoader;
 import com.almasb.fxgl.entity.level.Level;
 
 import com.pacmanjava.map.Lvl;
-import com.pacmanjava.map.PacManEntityFactory;
+//import com.pacmanjava.map.PacManEntityFactory;
 import com.pacmanjava.utils.Debug;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -37,13 +37,13 @@ public class PacManApp extends GameApplication {
 
     @Override
     protected void initGame() {
-        getGameWorld().addEntityFactory(new PacManEntityFactory());
+        //getGameWorld().addEntityFactory(new PacManEntityFactory());
 
         // the level file "tilemap.txt" is located under assets/levels/
-        Level level = getAssetLoader().loadLevel("tilemap.txt", new TextLevelLoader(8, 8, '0'));
+       // Level level = getAssetLoader().loadLevel("tilemap.txt", new TextLevelLoader(8, 8, '0'));
         Lvl.createLevelMatrix("tilemap.txt");
 
-        getGameWorld().setLevel(level);
+        //getGameWorld().setLevel(level);
 
         //cor do background
         getGameScene().setBackgroundColor(Color.BLACK);
@@ -66,7 +66,9 @@ public class PacManApp extends GameApplication {
             .with(new GhostSprite(Color.CYAN))
             .buildAndAttach();
 
-        Debug.viewLevelTiles();
+        //Debug.viewLevelTiles();
+
+        Lvl.viewMap();
     }
 
     //adiciona e cria as interações dos controles do jogo
