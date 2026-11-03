@@ -52,8 +52,9 @@ public class PacManApp extends GameApplication {
             }
         });
         settings.setManualResizeEnabled(true);
-        settings.setPreserveResizeRatio(true);
+        settings.setPreserveResizeRatio(false);
         settings.setFullScreenAllowed(true);
+        settings.setFullScreenFromStart(true);
         Debug.showFps();
     }
 
@@ -90,8 +91,6 @@ public class PacManApp extends GameApplication {
         //Debug.viewLevelTiles();
 
         Lvl.viewMap();
-
-        pacman.setDead(true);
     }
 
     //adiciona e cria as interações dos controles do jogo
@@ -111,17 +110,17 @@ public class PacManApp extends GameApplication {
         });
     }
 
-    @Override
-    protected void initUI() {
-        //cria um quadro preto ao redor do tabuleiro (para esconder o pacman se ele passa por uma fronteira)
-        Rectangle rect1 = new Rectangle(0, 0, WIDTH, HEIGHT);
-        rect1.setFill(Color.TRANSPARENT);
-        rect1.setStroke(Color.BLACK);
-        rect1.setStrokeWidth(16);
-        getGameScene().addUINode(rect1);
+    // @Override
+    // protected void initUI() {
+    //     //cria um quadro preto ao redor do tabuleiro (para esconder o pacman se ele passa por uma fronteira)
+    //     Rectangle rect1 = new Rectangle(0, 0, WIDTH, HEIGHT);
+    //     rect1.setFill(Color.TRANSPARENT);
+    //     rect1.setStroke(Color.BLACK);
+    //     rect1.setStrokeWidth(16);
+    //     getGameScene().addUINode(rect1);
 
-        Debug.initFpsUI();
-    }
+    //     Debug.initFpsUI();
+    // }
 
     @Override
     protected void initGameVars(Map<String, Object> vars) {
