@@ -1,11 +1,11 @@
-com\pacmanjava\utils\Utils$GhostSprite.class
 com\pacmanjava\entidade\PacMan.class
 com\pacmanjava\utils\Utils$PacmanSprite.class
 com\pacmanjava\utils\Utils$AnimationComponent.class
 com\pacmanjava\utils\Utils.class
 com\pacmanjava\entidade\EntidadeJogo.class
-com\pacmanjava\map\Lvl.class
 com\pacmanjava\PacManApp$1.class
 com\pacmanjava\utils\Debug.class
 com\pacmanjava\PacManApp.class
 com\pacmanjava\ui\MainMenu.class
+com\pacmanjava\utils\Utils$GhostSprite.class
+com\pacmanjava\map\Lvl.class

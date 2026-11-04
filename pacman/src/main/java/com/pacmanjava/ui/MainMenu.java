@@ -15,6 +15,7 @@ public class MainMenu extends FXGLMenu {
     private Animation<?> animation;
 
     private Texture btnJogar;
+    private double count = 0;
 
     public MainMenu() {
         super(MenuType.MAIN_MENU);
@@ -34,14 +35,13 @@ public class MainMenu extends FXGLMenu {
         btnJogar.setTranslateY(180);
 
         btnJogar.setOnMouseClicked(event -> fireNewGame());
+        //getContentRoot().setOnKeyPressed(event -> fireNewGame());
 
         getContentRoot().getChildren().addAll(bg, background, btnJogar);
 
 
     }
 
-    double count = 0;
-    double dec = 1;
 
     @Override
     protected void onUpdate(double tpf) {
@@ -50,11 +50,8 @@ public class MainMenu extends FXGLMenu {
         if (count <= 1) {
             btnJogar.setOpacity(count);
         } else {
-            if (dec <= 0) {
-                dec = 1;
-            }
-            dec = (dec - tpf);
-            btnJogar.setOpacity(dec);
+            btnJogar.setOpacity(btnJogar.getOpacity() - tpf);
         }
+
     }
 }

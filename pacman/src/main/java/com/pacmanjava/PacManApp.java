@@ -15,6 +15,7 @@ import com.pacmanjava.map.Lvl;
 //import com.pacmanjava.map.PacManEntityFactory;
 import com.pacmanjava.utils.Debug;
 import com.pacmanjava.utils.Utils.GhostSprite;
+import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
@@ -73,6 +74,10 @@ public class PacManApp extends GameApplication {
             .buildAndAttach();
 
         //Debug.viewLevelTiles();
+
+        getGameTimer().runOnceAfter(() -> {
+            pacman.setDead(true);
+        }, Duration.seconds(10));
 
         Lvl.viewMap();
     }
