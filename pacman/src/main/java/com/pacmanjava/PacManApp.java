@@ -75,9 +75,15 @@ public class PacManApp extends GameApplication {
 
         //Debug.viewLevelTiles();
 
+        play("start.wav");
+        pacman.setPaused(true);
+        runOnce(() -> {
+            pacman.setPaused(false);
+        }, Duration.seconds(4));
+
         getGameTimer().runOnceAfter(() -> {
             pacman.setDead(true);
-        }, Duration.seconds(10));
+        }, Duration.seconds(20));
 
         Lvl.viewMap();
     }

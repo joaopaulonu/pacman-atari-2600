@@ -2,6 +2,8 @@ package com.pacmanjava.entidade;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.audio.Sound;
+import javafx.util.Duration;
+import com.almasb.fxgl.time.TimerAction;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
@@ -10,7 +12,8 @@ public class PacMan extends EntidadeJogo {
 
     private boolean dying;
     private float deathAnimationTime = 0;
-    private Sound death0, death1;
+    private Sound death, siren;
+    private TimerAction timerAction;
 
     //coloca o player criado no PacManApp na variável entity
     public PacMan() {
@@ -20,7 +23,8 @@ public class PacMan extends EntidadeJogo {
             .buildAndAttach();
         speed = 60;
 
-        death0 = getAssetLoader().loadSound("death_0.wav");
+        death = getAssetLoader().loadSound("death.wav");
+        siren = getAssetLoader().loadSound("siren0.wav");
     }
 
     public void setDead(boolean dead) {
@@ -28,7 +32,7 @@ public class PacMan extends EntidadeJogo {
     }
 
     private boolean played = false;
-    private boolean played2 = false;
+    private boolean playedSiren = false;
 
     //maneja o movimento do jogador (movimentação e teleportagem nos extremos)
     public void handleMovement(double tpf) {
@@ -36,6 +40,9 @@ public class PacMan extends EntidadeJogo {
         if (dead) { return; }
 
         if (dying) { 
+            siren.getAudio().stop();
+            timerAction.expire();
+
             bufferDirection = "";
             currentDirection = "";
 
@@ -43,7 +50,7 @@ public class PacMan extends EntidadeJogo {
 
             if (deathAnimationTime >= 2) {
                 if (!played) {
-                    death0.getAudio().play();
+                    death.getAudio().play();
                     played = true;
                 }
                 entity.getComponent(PacmanSprite.class).dying();
@@ -52,25 +59,30 @@ public class PacMan extends EntidadeJogo {
             }
 
             if (deathAnimationTime >= 4) {
-                if (!played2) {
-                    play("death_1.wav");
-                    played2 = true;
-                }
                 entity.getComponent(PacmanSprite.class).dead();
-            }
-
-            if (deathAnimationTime >= 4.2) {
-                play("death_1.wav");
                 dead = true;
             }
 
             return; 
         }
 
+
+        if (bufferDirection != "" && !playedSiren) {
+            siren.getAudio().play();
+            timerAction = getGameTimer().runAtInterval(() -> {
+                siren.getAudio().play();
+            }, Duration.millis(400));
+            playedSiren = true;
+        }
+
         posX = (int) entity.getPosition().getX();
         posY = (int) entity.getPosition().getY();
 
-        bufferDirection = getInputBufferDirection();
+        if (!paused) {
+            bufferDirection = getInputBufferDirection();
+        } else {
+            setInputBufferDirection("");
+        }
 
         //atualiza a direção do jogador
         if ((onTile() || currentDirection.equals("")) && currentDirection != bufferDirection && getTileInFront(bufferDirection) == 0) {

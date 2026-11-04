@@ -12,7 +12,8 @@ public abstract class EntidadeJogo {
     protected String bufferDirection = ""; //seguinte direcao guardada
     protected String currentDirection = ""; //direcao atual de movimento
     protected Entity entity;
-    protected boolean dead;
+    protected boolean dead = false;
+    protected boolean paused = false;
 
     //verifica se a entidade tá dentro de um tile
     protected boolean onTile() {
@@ -72,6 +73,10 @@ public abstract class EntidadeJogo {
 
     public void setDead(boolean dead) {
         this.dead = dead;
+    }
+
+    public void setPaused(boolean pause) {
+        this.paused = pause;
     }
     
     public abstract void handleMovement(double tpf);
