@@ -8,7 +8,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import java.util.Map;
-import com.pacmanjava.entidade.PacMan;
+import com.pacmanjava.entidades.PacMan;
 import com.almasb.fxgl.entity.Entity;
 import com.pacmanjava.ui.MainMenu;
 import com.pacmanjava.map.Lvl;
@@ -52,8 +52,8 @@ public class PacManApp extends GameApplication {
 
         //getGameWorld().setLevel(level);
 
-        //cor do background
         getGameScene().setBackgroundColor(Color.BLACK);
+        //cor do background
         //criação do player
         pacman = new PacMan();
         red = entityBuilder()

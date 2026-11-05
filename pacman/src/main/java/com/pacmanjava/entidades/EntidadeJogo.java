@@ -1,4 +1,4 @@
-package com.pacmanjava.entidade;
+package com.pacmanjava.entidades;
 
 import com.almasb.fxgl.entity.Entity;
 import com.pacmanjava.map.Lvl;
