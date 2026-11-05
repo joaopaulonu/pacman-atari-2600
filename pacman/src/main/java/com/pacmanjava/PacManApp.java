@@ -7,8 +7,10 @@ import com.almasb.fxgl.app.scene.SceneFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.geometry.Rectangle2D;
 import java.util.Map;
 import com.pacmanjava.entidades.PacMan;
+import com.pacmanjava.consumables.Consumable;
 import com.almasb.fxgl.entity.Entity;
 import com.pacmanjava.ui.MainMenu;
 import com.pacmanjava.map.Lvl;
@@ -22,6 +24,7 @@ import static com.pacmanjava.utils.Utils.*;
 
 public class PacManApp extends GameApplication {
     private static PacMan pacman;
+    private static Consumable consumable;
     private static Entity red, pink, orange, cyan;
 
     @Override
@@ -55,7 +58,9 @@ public class PacManApp extends GameApplication {
         getGameScene().setBackgroundColor(Color.BLACK);
         //cor do background
         //criação do player
+        Consumable.placeConsumables();
         pacman = new PacMan();
+
         red = entityBuilder()
             .at((WIDTH / 2), (HEIGHT / 2) - 28)
             .with(new GhostSprite(Color.RED))
@@ -83,7 +88,7 @@ public class PacManApp extends GameApplication {
 
         getGameTimer().runOnceAfter(() -> {
             pacman.setDead(true);
-        }, Duration.seconds(20));
+        }, Duration.seconds(120));
 
         Lvl.viewMap();
     }

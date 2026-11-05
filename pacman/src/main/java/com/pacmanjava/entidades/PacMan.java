@@ -4,6 +4,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.audio.Sound;
 import javafx.util.Duration;
 import com.almasb.fxgl.time.TimerAction;
+import com.pacmanjava.consumables.Consumable;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
@@ -41,7 +42,10 @@ public class PacMan extends EntidadeJogo {
 
         if (dying) { 
             siren.getAudio().stop();
-            timerAction.expire();
+
+            if (timerAction != null) {
+                timerAction.expire();
+            }
 
             bufferDirection = "";
             currentDirection = "";
@@ -85,7 +89,7 @@ public class PacMan extends EntidadeJogo {
         }
 
         //atualiza a direção do jogador
-        if ((onTile() || currentDirection.equals("")) && currentDirection != bufferDirection && getTileInFront(bufferDirection) == 0) {
+        if ((onTile() || currentDirection.equals("")) && currentDirection != bufferDirection && getTileInFront(bufferDirection) != 1) {
             currentDirection = bufferDirection;
             
             //alinha exatamente no centro do tile
@@ -93,7 +97,7 @@ public class PacMan extends EntidadeJogo {
             entity.setY(posY);
         }
 
-        if (onTile() && getTileInFront(currentDirection) != 0) {
+        if (onTile() && getTileInFront(currentDirection) == 1) {
             currentDirection = "";
 
             //alinha exatamente no centro do tile
@@ -121,6 +125,10 @@ public class PacMan extends EntidadeJogo {
                 entity.translateY(speed * tpf); 
                 entity.getComponent(PacmanSprite.class).moveDown(); 
                 break;
+        }
+
+        if (onTile() && Consumable.isConsumable(getTile())) {
+            Consumable.getConsumable((posX - 4) / 8, (posY - 4) / 8).consume();
         }
 
         handleBoundaries();

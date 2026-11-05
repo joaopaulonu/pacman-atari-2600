@@ -10,3 +10,4 @@ com\pacmanjava\ui\MainMenu.class
 com\pacmanjava\ui\MainMenu$1.class
 com\pacmanjava\utils\Utils$GhostSprite.class
 com\pacmanjava\map\Lvl.class
+com\pacmanjava\consumables\Consumable.class
