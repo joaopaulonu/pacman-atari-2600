@@ -124,7 +124,7 @@ public class PacManApp extends GameApplication {
     public static void main(String[] args) {
         //deixa o jogo rodar no máximo a 360 fps
         System.setProperty("prism.vsync", "false");
-        System.setProperty("javafx.animation.pulse", "60");
+        System.setProperty("javafx.animation.pulse", "1");
         launch(args);
     }
 }
