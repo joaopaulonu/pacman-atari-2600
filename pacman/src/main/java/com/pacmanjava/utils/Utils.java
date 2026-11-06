@@ -171,8 +171,6 @@ public class Utils {
 
     //classe para as animações dos fantasmas
     public static class GhostSprite extends AnimationComponent {
-        private Image spriteSheetEyes;
-
         private String animState = "";
         private boolean dead = false;
 

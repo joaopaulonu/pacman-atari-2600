@@ -97,5 +97,5 @@ public abstract class EntidadeJogo {
         }, time);
     }
     
-    public abstract void handleMovement(double tpf);
+    public abstract void handleMovement(double tpf, int epf);
 }

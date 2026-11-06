@@ -5,8 +5,6 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import java.util.Map;
 import com.pacmanjava.entidades.PacMan;
 import com.pacmanjava.consumables.Consumable;
@@ -22,7 +20,6 @@ import static com.pacmanjava.utils.Utils.*;
 
 public class PacManApp extends GameApplication {
     private static PacMan pacman;
-    private static Entity red, pink, orange, cyan;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -46,28 +43,9 @@ public class PacManApp extends GameApplication {
     @Override
     protected void initGame() {
         Lvl.createLevelMatrix("tilemap.txt");
-        Lvl.viewMap();
         Consumable.placeConsumables();
 
-        getGameScene().setBackgroundColor(Color.BLACK);
-
         pacman = new PacMan();
-        red = entityBuilder()
-            .at((WIDTH / 2), (HEIGHT / 2) - 28)
-            .with(new GhostSprite(Color.RED))
-            .buildAndAttach();
-        pink = entityBuilder()
-            .at((WIDTH / 2), (HEIGHT / 2) - 4)
-            .with(new GhostSprite(Color.PINK))
-            .buildAndAttach();
-        orange = entityBuilder()
-            .at((WIDTH / 2) + 16, (HEIGHT / 2) - 4)
-            .with(new GhostSprite(Color.ORANGE))
-            .buildAndAttach();
-        cyan = entityBuilder()
-            .at((WIDTH / 2) - 16, (HEIGHT / 2) - 4)
-            .with(new GhostSprite(Color.CYAN))
-            .buildAndAttach();
 
         //intro (musica e pausa o jogador)
         play("start.wav");
@@ -97,13 +75,7 @@ public class PacManApp extends GameApplication {
 
     @Override
     protected void initUI() {
-        //cria um quadro preto ao redor do tabuleiro (para esconder o pacman se ele passa por uma fronteira)
-        Rectangle rect1 = new Rectangle(0, 0, WIDTH, HEIGHT);
-        rect1.setFill(Color.TRANSPARENT);
-        rect1.setStroke(Color.BLACK);
-        rect1.setStrokeWidth(16);
-        getGameScene().addUINode(rect1);
-
+        Lvl.viewMap();
         Debug.initFpsUI();
     }
 
@@ -115,16 +87,12 @@ public class PacManApp extends GameApplication {
     @Override
     protected void onUpdate(double tpf) {
         Debug.updateFps(tpf);
-        Debug.cycleGhostAnimationChannels(red.getComponent(GhostSprite.class), 10, tpf);
-        Debug.cycleGhostAnimationChannels(pink.getComponent(GhostSprite.class), 10, tpf);
-        Debug.cycleGhostAnimationChannels(orange.getComponent(GhostSprite.class), 10, tpf);
-        Debug.cycleGhostAnimationChannels(cyan.getComponent(GhostSprite.class), 10, tpf);
     }
 
     public static void main(String[] args) {
         //deixa o jogo rodar no máximo a 360 fps
         System.setProperty("prism.vsync", "false");
-        System.setProperty("javafx.animation.pulse", "1");
+        System.setProperty("javafx.animation.pulse", "360");
         launch(args);
     }
 }
