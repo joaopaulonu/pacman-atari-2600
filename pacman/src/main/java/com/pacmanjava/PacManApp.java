@@ -21,9 +21,6 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
 
 public class PacManApp extends GameApplication {
-    private static PacMan pacman;
-    private static Entity red, pink, orange, cyan;
-
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setWidth(WIDTH);
@@ -51,23 +48,7 @@ public class PacManApp extends GameApplication {
 
         getGameScene().setBackgroundColor(Color.BLACK);
 
-        pacman = new PacMan();
-        red = entityBuilder()
-            .at((WIDTH / 2), (HEIGHT / 2) - 28)
-            .with(new GhostSprite(Color.RED))
-            .buildAndAttach();
-        pink = entityBuilder()
-            .at((WIDTH / 2), (HEIGHT / 2) - 4)
-            .with(new GhostSprite(Color.PINK))
-            .buildAndAttach();
-        orange = entityBuilder()
-            .at((WIDTH / 2) + 16, (HEIGHT / 2) - 4)
-            .with(new GhostSprite(Color.ORANGE))
-            .buildAndAttach();
-        cyan = entityBuilder()
-            .at((WIDTH / 2) - 16, (HEIGHT / 2) - 4)
-            .with(new GhostSprite(Color.CYAN))
-            .buildAndAttach();
+        PacMan pacman = new PacMan();
 
         //intro (musica e pausa o jogador)
         play("start.wav");
@@ -115,16 +96,12 @@ public class PacManApp extends GameApplication {
     @Override
     protected void onUpdate(double tpf) {
         Debug.updateFps(tpf);
-        Debug.cycleGhostAnimationChannels(red.getComponent(GhostSprite.class), 10, tpf);
-        Debug.cycleGhostAnimationChannels(pink.getComponent(GhostSprite.class), 10, tpf);
-        Debug.cycleGhostAnimationChannels(orange.getComponent(GhostSprite.class), 10, tpf);
-        Debug.cycleGhostAnimationChannels(cyan.getComponent(GhostSprite.class), 10, tpf);
     }
 
     public static void main(String[] args) {
         //deixa o jogo rodar no máximo a 360 fps
         System.setProperty("prism.vsync", "false");
-        System.setProperty("javafx.animation.pulse", "1");
+        System.setProperty("javafx.animation.pulse", "360");
         launch(args);
     }
 }
