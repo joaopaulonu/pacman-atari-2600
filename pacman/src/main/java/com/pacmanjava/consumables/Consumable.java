@@ -34,6 +34,7 @@ public class Consumable {
     //limpa a lista e os entities associados
     public static void clearAll() {
         for (Consumable c : consumables) {
+            Lvl.level[c.posY][c.posX] = 0;
             c.entity.removeFromWorld();
         }
 

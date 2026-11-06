@@ -9,6 +9,7 @@ public class FixedUpdateComponent extends Component {
     private static final double FIXED_TIME_STEP = 0.01;
 
     private double timer = 0;
+    private int epf = 0;
     private EntidadeJogo entity;
 
     public FixedUpdateComponent(EntidadeJogo entity) {
@@ -20,17 +21,19 @@ public class FixedUpdateComponent extends Component {
     //entra num loop de execução do onFixedUpdate até o timer diminuir de volta
     @Override
     public void onUpdate(double tpf) {
+        epf = 0; //numero de execuções do onFixedUpdate() por frame
         timer += tpf;
 
         while (timer >= FIXED_TIME_STEP) {
-            onFixedUpdate(FIXED_TIME_STEP);
+            epf++;
+            onFixedUpdate(FIXED_TIME_STEP, epf);
             timer -= FIXED_TIME_STEP;
         }
     }
 
-    public void onFixedUpdate(double timeStep) {
+    public void onFixedUpdate(double timeStep, int epf) {
         if (entity != null) {
-            entity.handleMovement(timeStep);
+            entity.handleMovement(timeStep, epf);
         }
     }
 }

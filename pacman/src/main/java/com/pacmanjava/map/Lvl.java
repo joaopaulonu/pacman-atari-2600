@@ -2,12 +2,14 @@ package com.pacmanjava.map;
 
 import java.util.Scanner;
 
-import com.almasb.fxgl.entity.components.IrremovableComponent;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
+import com.almasb.fxgl.texture.Texture;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
+
+import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
 
 public class Lvl {
@@ -34,11 +36,16 @@ public class Lvl {
 
     //inicializa a imagem do mapa
     public static void viewMap() {
-        entityBuilder()
-            .at(0, 0)
-            .view(createSprite("maporiginal.png"))
-            .with(new IrremovableComponent())
-            .zIndex(-10)
-            .buildAndAttach();
+            Texture map = createSprite("maporiginal.png");
+
+            //cria um quadro preto ao redor do tabuleiro (para esconder o pacman se ele passa por uma fronteira)
+            Rectangle rect = new Rectangle(0, 0, WIDTH, HEIGHT);
+            rect.setFill(Color.TRANSPARENT);
+            rect.setStroke(Color.BLACK);
+            rect.setStrokeWidth(16);
+
+            getGameScene().setBackgroundColor(Color.BLACK);
+            getGameScene().addUINode(map);
+            getGameScene().addUINode(rect);
     }
 }

@@ -5,8 +5,6 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import java.util.Map;
 import com.pacmanjava.entidades.PacMan;
 import com.pacmanjava.consumables.Consumable;
@@ -43,10 +41,7 @@ public class PacManApp extends GameApplication {
     @Override
     protected void initGame() {
         Lvl.createLevelMatrix("tilemap.txt");
-        Lvl.viewMap();
         Consumable.placeConsumables();
-
-        getGameScene().setBackgroundColor(Color.BLACK);
 
         PacMan pacman = new PacMan();
 
@@ -78,13 +73,7 @@ public class PacManApp extends GameApplication {
 
     @Override
     protected void initUI() {
-        //cria um quadro preto ao redor do tabuleiro (para esconder o pacman se ele passa por uma fronteira)
-        Rectangle rect1 = new Rectangle(0, 0, WIDTH, HEIGHT);
-        rect1.setFill(Color.TRANSPARENT);
-        rect1.setStroke(Color.BLACK);
-        rect1.setStrokeWidth(16);
-        getGameScene().addUINode(rect1);
-
+        Lvl.viewMap();
         Debug.initFpsUI();
     }
 

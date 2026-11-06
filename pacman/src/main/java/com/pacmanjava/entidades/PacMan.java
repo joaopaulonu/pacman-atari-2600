@@ -23,7 +23,6 @@ public class PacMan extends EntidadeJogo {
             .with(new FixedUpdateComponent(this))
             .buildAndAttach();
         speed = 60;
-
         death = getAssetLoader().loadSound("death.wav");
         siren = getAssetLoader().loadSound("siren0.wav");
     }
@@ -65,8 +64,7 @@ public class PacMan extends EntidadeJogo {
     }
 
     //maneja o movimento do jogador (movimentação e teleportagem nos extremos)
-    public void handleMovement(double tpf) {
-
+    public void handleMovement(double tpf, int epf) {
         if (dead) { return; }
 
         if (dying) { 
@@ -93,7 +91,9 @@ public class PacMan extends EntidadeJogo {
         //consome os dots
         if (onTile() && Consumable.getConsumable((posX - 4) / 8, (posY - 4) / 8) != null) {
             Consumable.getConsumable((posX - 4) / 8, (posY - 4) / 8).consume();
-            pauseFor(Duration.seconds(1 / 60));
+            if (epf < 2) {
+                pauseFor(Duration.millis(16.67));
+            }
             return;
         }
 

@@ -10,6 +10,11 @@ public class Debug extends Utils {
     private static boolean showFps = false;
     private static double frames = 0;
 
+    //visualizador de fps (para testar o desempenho do jogo)
+    public static void showFps() {
+        showFps = true;
+    }
+    
     //visualização dos tiles (para fazer testes de posição dos entities)
     public static void viewLevelTiles() {
         entityBuilder()
@@ -20,10 +25,6 @@ public class Debug extends Utils {
             .buildAndAttach();
     }
 
-    //visualizador de fps (para testar o desempenho do jogo)
-    public static void showFps() {
-        showFps = true;
-    }
     public static void initFpsUI() {
         if (showFps) {
             Text text = new Text("FPS ");
