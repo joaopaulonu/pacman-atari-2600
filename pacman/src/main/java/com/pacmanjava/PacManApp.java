@@ -7,14 +7,12 @@ import com.almasb.fxgl.app.scene.SceneFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.geometry.Rectangle2D;
 import java.util.Map;
 import com.pacmanjava.entidades.PacMan;
 import com.pacmanjava.consumables.Consumable;
 import com.almasb.fxgl.entity.Entity;
 import com.pacmanjava.ui.MainMenu;
 import com.pacmanjava.map.Lvl;
-//import com.pacmanjava.map.PacManEntityFactory;
 import com.pacmanjava.utils.Debug;
 import com.pacmanjava.utils.Utils.GhostSprite;
 import javafx.util.Duration;
@@ -24,7 +22,6 @@ import static com.pacmanjava.utils.Utils.*;
 
 public class PacManApp extends GameApplication {
     private static PacMan pacman;
-    private static Consumable consumable;
     private static Entity red, pink, orange, cyan;
 
     @Override
@@ -48,19 +45,13 @@ public class PacManApp extends GameApplication {
 
     @Override
     protected void initGame() {
-        //getGameWorld().addEntityFactory(new PacManEntityFactory());
-
-       // Level level = getAssetLoader().loadLevel("tilemap.txt", new TextLevelLoader(8, 8, '0'));
         Lvl.createLevelMatrix("tilemap.txt");
-
-        //getGameWorld().setLevel(level);
+        Lvl.viewMap();
+        Consumable.placeConsumables();
 
         getGameScene().setBackgroundColor(Color.BLACK);
-        //cor do background
-        //criação do player
-        Consumable.placeConsumables();
-        pacman = new PacMan();
 
+        pacman = new PacMan();
         red = entityBuilder()
             .at((WIDTH / 2), (HEIGHT / 2) - 28)
             .with(new GhostSprite(Color.RED))
@@ -78,19 +69,13 @@ public class PacManApp extends GameApplication {
             .with(new GhostSprite(Color.CYAN))
             .buildAndAttach();
 
-        //Debug.viewLevelTiles();
-
+        //intro (musica e pausa o jogador)
         play("start.wav");
-        pacman.setPaused(true);
+        pacman.pause();
         runOnce(() -> {
-            pacman.setPaused(false);
+            setInputBufferDirection("");
+            pacman.resume();
         }, Duration.seconds(4));
-
-        getGameTimer().runOnceAfter(() -> {
-            pacman.setDead(true);
-        }, Duration.seconds(120));
-
-        Lvl.viewMap();
     }
 
     //adiciona e cria as interações dos controles do jogo
@@ -129,8 +114,6 @@ public class PacManApp extends GameApplication {
 
     @Override
     protected void onUpdate(double tpf) {
-        pacman.handleMovement(tpf);
-
         Debug.updateFps(tpf);
         Debug.cycleGhostAnimationChannels(red.getComponent(GhostSprite.class), 10, tpf);
         Debug.cycleGhostAnimationChannels(pink.getComponent(GhostSprite.class), 10, tpf);
@@ -139,9 +122,9 @@ public class PacManApp extends GameApplication {
     }
 
     public static void main(String[] args) {
-        //deixa o jogo rodar na quantidade máxima de fps
+        //deixa o jogo rodar no máximo a 360 fps
         System.setProperty("prism.vsync", "false");
-        System.setProperty("javafx.animation.fullspeed", "true");
+        System.setProperty("javafx.animation.pulse", "60");
         launch(args);
     }
 }

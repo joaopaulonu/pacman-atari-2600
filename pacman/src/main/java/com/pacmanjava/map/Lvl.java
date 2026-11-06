@@ -12,8 +12,9 @@ import static com.pacmanjava.utils.Utils.*;
 
 public class Lvl {
 
-    public static byte[][] level = new byte[HEIGHT / 8][WIDTH / 8];
+    public static byte[][] level = new byte[HEIGHT / 8][WIDTH / 8]; //matriz de todos os objetos no mapa (excluindo entidades e ui)
     
+    //lé os valores de um documento de texto representando o mapa em bytes
     public static void createLevelMatrix(String directory) {
         File file = new File(("./src/main/resources/assets/levels/" + directory));
         String line;
@@ -31,6 +32,7 @@ public class Lvl {
         }
     }
 
+    //inicializa a imagem do mapa
     public static void viewMap() {
         entityBuilder()
             .at(0, 0)

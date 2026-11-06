@@ -1,6 +1,7 @@
 package com.pacmanjava.utils;
 
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.animation.Animation;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.texture.ImagesKt;
@@ -14,9 +15,9 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class Utils {
     public static final int WIDTH = 240; //224 + 16
     public static final int HEIGHT = 304; //288 + 16
-    private static final int UPSCALE_FACTOR = 10;
 
-    private static String inputBufferDirection = "";
+    private static final int UPSCALE_FACTOR = 10;
+    private static String inputBufferDirection = ""; //guarda o input do jogador
 
     public static String getInputBufferDirection() { 
         return inputBufferDirection; 
@@ -25,6 +26,7 @@ public class Utils {
         inputBufferDirection = direction; 
     }
 
+    //cria uma textura sem Anti-Aliasing
     public static Texture createSprite(String local) {
         Image original = image(local);
         Image enlarged = ImagesKt.resize(original, (int)original.getWidth() * UPSCALE_FACTOR, (int)original.getHeight() * UPSCALE_FACTOR);
@@ -44,6 +46,7 @@ public class Utils {
         return sprite;
     }
     
+    //Classe para as animações
     private static abstract class AnimationComponent extends Component {
         protected int frameCount;
         protected int frameSize;
@@ -51,7 +54,25 @@ public class Utils {
         protected int scaledFrameSize;
 
         protected AnimatedTexture texture;
+        /*
+            Acessa uma propriedade do AnimatedTexture que por alguma razão é private
+            Ajuda a acessar os metodos de pausa e resume das animações
+        */
+        private Animation<Integer> animation() {
+            return org.joor.Reflect
+                .on(this.texture)
+                .field("animation")
+                .get();
+        }
+        public void setPaused() {
+            animation().pause();
+        }
+        public void setResumed() {
+            animation().resume();
+        }
 
+        //atualiza o tamanho do AnimatedTexture porque o createSprite() aumenta o tamanho
+        //AnimatedTexture perde o tamanho original cada frame
         protected void updateTextureSize(AnimatedTexture t) {
             t.setFitWidth(frameSize);
             t.setFitHeight(frameSize);
@@ -65,6 +86,7 @@ public class Utils {
         public abstract void moveDown();
     }
 
+    //classe para as animações do pac-man
     public static class PacmanSprite extends AnimationComponent {
         private String dir = "";
         private boolean dying = false;
@@ -147,6 +169,7 @@ public class Utils {
         }
     }
 
+    //classe para as animações dos fantasmas
     public static class GhostSprite extends AnimationComponent {
         private Image spriteSheetEyes;
 

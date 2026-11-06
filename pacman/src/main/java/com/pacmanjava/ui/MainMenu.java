@@ -2,43 +2,44 @@ package com.pacmanjava.ui;
 
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.input.TriggerListener;
 import com.almasb.fxgl.input.Trigger;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
+import com.pacmanjava.consumables.Consumable;
 
 import static com.pacmanjava.utils.Utils.*;
 
 public class MainMenu extends FXGLMenu {
-    private Texture btnJogar, background;
-    private Rectangle bg;
+    private Texture pressStart, logo;
+    private Rectangle background;
     private double count = 0;
 
     public MainMenu() {
         super(MenuType.MAIN_MENU);
 
-        bg = new Rectangle(WIDTH, HEIGHT, Color.BLACK);
-        background = createSprite("ui/menuimage.png");
+        background = new Rectangle(WIDTH, HEIGHT, Color.BLACK);
 
-        background.setTranslateY(75);
-        background.setFitHeight(background.getFitHeight() - 5);
-        background.setFitWidth(background.getFitWidth() - 30);
+        logo = createSprite("ui/menuimage.png");
+        logo.setTranslateY(75);
+        logo.setFitHeight(logo.getFitHeight() - 5);
+        logo.setFitWidth(logo.getFitWidth() - 30);
 
-        btnJogar = createSprite("ui/pressimage.png");
+        pressStart = createSprite("ui/pressimage.png");
+        pressStart.setTranslateX((WIDTH - pressStart.getFitWidth()) / 2);
+        pressStart.setTranslateY(180);
 
-        btnJogar.setTranslateX((WIDTH - btnJogar.getFitWidth()) / 2);
-        btnJogar.setTranslateY(180);
-
+        //leia qualquer input
         getInput().addTriggerListener(new TriggerListener() {
             @Override
             protected void onActionBegin(Trigger trigger) {
+                Consumable.clearAll(); //limpa os consumables da última sessão (se ainda existem)
                 fireNewGame();
             }
         });
 
-        getContentRoot().getChildren().addAll(bg, background, btnJogar);
+        getContentRoot().getChildren().addAll(background, logo, pressStart);
     }
 
     @Override
@@ -46,9 +47,9 @@ public class MainMenu extends FXGLMenu {
         count = (count + tpf) % 2;
 
         if (count <= 1) {
-            btnJogar.setOpacity(count);
+            pressStart.setOpacity(count);
         } else {
-            btnJogar.setOpacity(btnJogar.getOpacity() - tpf);
+            pressStart.setOpacity(pressStart.getOpacity() - tpf);
         }
 
     }

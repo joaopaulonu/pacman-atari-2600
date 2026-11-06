@@ -2,8 +2,10 @@ package com.pacmanjava.entidades;
 
 import com.almasb.fxgl.entity.Entity;
 import com.pacmanjava.map.Lvl;
+import javafx.util.Duration;
 
 import static com.pacmanjava.utils.Utils.*;
+import static com.almasb.fxgl.dsl.FXGL.*;
 
 public abstract class EntidadeJogo {
     protected int posX;
@@ -30,22 +32,18 @@ public abstract class EntidadeJogo {
         return false;
     } 
 
+    //pega o byte na matriz 'level' que representa o tile
     public byte getTile() {
-        //um tile == 8 pixels
         int posTilesX = (posX - 4) / 8;
         int posTilesY = (posY - 4) / 8;
-        int nearestTileX = Math.round(posTilesX);
-        int nearestTileY = Math.round(posTilesY);
 
-        return Lvl.level[nearestTileY][nearestTileX];
+        return Lvl.level[posTilesX][posTilesY];
     }
 
+    //pega o tile na frente da direção
     public byte getTileInFront(String direction) {
-        //um tile == 8 pixels
         int posTilesX = (posX - 4) / 8;
         int posTilesY = (posY - 4) / 8;
-        int nearestTileX = Math.round(posTilesX);
-        int nearestTileY = Math.round(posTilesY);
 
             switch(direction) {
                 case "RIGHT": 
@@ -75,8 +73,28 @@ public abstract class EntidadeJogo {
         this.dead = dead;
     }
 
-    public void setPaused(boolean pause) {
-        this.paused = pause;
+    //congela uma entidade
+    public void pause() {
+        if (entity.getComponent(PacmanSprite.class) != null) {
+            entity.getComponent(PacmanSprite.class).setPaused();
+        }
+        this.paused = true;
+    }
+
+    //descongela
+    public void resume() {
+        if (entity.getComponent(PacmanSprite.class) != null) {
+            entity.getComponent(PacmanSprite.class).setResumed();
+        }
+        this.paused = false;
+    }
+
+    public void pauseFor(Duration time) {
+        pause();
+
+        getGameTimer().runOnceAfter(() -> {
+            resume();
+        }, time);
     }
     
     public abstract void handleMovement(double tpf);

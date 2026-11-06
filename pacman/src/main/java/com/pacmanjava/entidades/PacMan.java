@@ -16,11 +16,11 @@ public class PacMan extends EntidadeJogo {
     private Sound death, siren;
     private TimerAction timerAction;
 
-    //coloca o player criado no PacManApp na variável entity
     public PacMan() {
         this.entity = entityBuilder()
             .at((WIDTH / 2), (HEIGHT / 2) + 68)
             .with(new PacmanSprite())
+            .with(new FixedUpdateComponent(this))
             .buildAndAttach();
         speed = 60;
 
@@ -32,8 +32,37 @@ public class PacMan extends EntidadeJogo {
         dying = dead;
     }
 
-    private boolean played = false;
-    private boolean playedSiren = false;
+    private boolean playedDeath = false; //se já tocou o audio de morte
+    private boolean playedSiren = false; //se já tocou o audio do alarme
+
+    //faz a animação de morte
+    private void playDeathAnimation(double tpf) {
+        siren.getAudio().stop();
+
+        if (timerAction != null) {
+            timerAction.expire();
+        }
+
+        bufferDirection = "";
+        currentDirection = "";
+
+        deathAnimationTime += tpf;
+
+        if (deathAnimationTime >= 2) {
+            if (!playedDeath) {
+                death.getAudio().play();
+                playedDeath = true;
+            }
+            entity.getComponent(PacmanSprite.class).dying();
+        } else {
+            entity.getComponent(PacmanSprite.class).setPaused();
+        }
+
+        if (deathAnimationTime >= 4) {
+            entity.getComponent(PacmanSprite.class).dead();
+            dead = true;
+        }
+    }
 
     //maneja o movimento do jogador (movimentação e teleportagem nos extremos)
     public void handleMovement(double tpf) {
@@ -41,36 +70,11 @@ public class PacMan extends EntidadeJogo {
         if (dead) { return; }
 
         if (dying) { 
-            siren.getAudio().stop();
-
-            if (timerAction != null) {
-                timerAction.expire();
-            }
-
-            bufferDirection = "";
-            currentDirection = "";
-
-            deathAnimationTime += tpf;
-
-            if (deathAnimationTime >= 2) {
-                if (!played) {
-                    death.getAudio().play();
-                    played = true;
-                }
-                entity.getComponent(PacmanSprite.class).dying();
-            } else {
-                entity.getComponent(PacmanSprite.class).idle();
-            }
-
-            if (deathAnimationTime >= 4) {
-                entity.getComponent(PacmanSprite.class).dead();
-                dead = true;
-            }
-
+            playDeathAnimation(tpf);
             return; 
         }
 
-
+        //audio do alarme
         if (bufferDirection != "" && !playedSiren) {
             siren.getAudio().play();
             timerAction = getGameTimer().runAtInterval(() -> {
@@ -79,13 +83,18 @@ public class PacMan extends EntidadeJogo {
             playedSiren = true;
         }
 
-        posX = (int) entity.getPosition().getX();
-        posY = (int) entity.getPosition().getY();
+        if (paused) { return; } //não passaa de aqui se o pac-man é pausado
 
-        if (!paused) {
-            bufferDirection = getInputBufferDirection();
-        } else {
-            setInputBufferDirection("");
+        posX = (int) entity.getPosition().getX(); //atualiza a posição
+        posY = (int) entity.getPosition().getY(); //atualiza a posição
+        
+        bufferDirection = getInputBufferDirection(); //guarda o input do usuario
+
+        //consome os dots
+        if (onTile() && Consumable.getConsumable((posX - 4) / 8, (posY - 4) / 8) != null) {
+            Consumable.getConsumable((posX - 4) / 8, (posY - 4) / 8).consume();
+            pauseFor(Duration.seconds(1 / 60));
+            return;
         }
 
         //atualiza a direção do jogador
@@ -95,8 +104,11 @@ public class PacMan extends EntidadeJogo {
             //alinha exatamente no centro do tile
             entity.setX(posX);
             entity.setY(posY);
+
+            entity.getComponent(PacmanSprite.class).setResumed();
         }
 
+        //colisão com as paredes
         if (onTile() && getTileInFront(currentDirection) == 1) {
             currentDirection = "";
 
@@ -104,7 +116,7 @@ public class PacMan extends EntidadeJogo {
             entity.setX(posX);
             entity.setY(posY);
 
-            entity.getComponent(PacmanSprite.class).idle(); 
+            entity.getComponent(PacmanSprite.class).setPaused(); 
         }
 
         //movimentar jogador
@@ -125,10 +137,6 @@ public class PacMan extends EntidadeJogo {
                 entity.translateY(speed * tpf); 
                 entity.getComponent(PacmanSprite.class).moveDown(); 
                 break;
-        }
-
-        if (onTile() && Consumable.isConsumable(getTile())) {
-            Consumable.getConsumable((posX - 4) / 8, (posY - 4) / 8).consume();
         }
 
         handleBoundaries();
