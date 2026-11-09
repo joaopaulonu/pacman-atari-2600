@@ -10,6 +10,7 @@ import com.pacmanjava.entidades.PacMan;
 import com.pacmanjava.consumables.Consumable;
 import com.almasb.fxgl.entity.Entity;
 import com.pacmanjava.ui.MainMenu;
+import com.pacmanjava.ui.ResumeGame;
 import com.pacmanjava.map.Lvl;
 import com.pacmanjava.utils.Debug;
 import com.pacmanjava.utils.Utils.GhostSprite;
@@ -25,16 +26,22 @@ public class PacManApp extends GameApplication {
         settings.setHeight(HEIGHT);
         settings.setTitle("Pac-Man");
         settings.setVersion("1.0");
+        settings.setManualResizeEnabled(true);
+        settings.setPreserveResizeRatio(true);
+        settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
+        settings.setGameMenuEnabled(true);
         settings.setSceneFactory(new SceneFactory() {
             @Override
             public FXGLMenu newMainMenu() {
                 return new MainMenu();
             }
+
+            @Override
+            public FXGLMenu newGameMenu() {
+                return new ResumeGame();
+            }
         });
-        settings.setManualResizeEnabled(true);
-        settings.setPreserveResizeRatio(true);
-        settings.setFullScreenAllowed(true);
         Debug.showFps();
     }
 

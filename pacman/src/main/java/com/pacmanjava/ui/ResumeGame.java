@@ -1,40 +1,37 @@
-import static com.pacmanjava.utils.Utils.createSprite;
+package com.pacmanjava.ui;
 
+import static com.pacmanjava.utils.Utils.createSprite;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
+import com.almasb.fxgl.texture.Texture;
+
 import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 public class ResumeGame extends FXGLMenu {
 
     public ResumeGame() {
         super(MenuType.GAME_MENU);
 
-        pause = createSprite("ui/pausedimage.png");
-        pause.setFitWidth(pause.getFitWidth() - 30);
+        Texture pause = createSprite("ui/pausedimage.png");
+        pause.setFitWidth(pause.getFitWidth() - 96);
 
-        pressResume = createSprite("ui/resumeimage.png");
-        pressResume.setFitWidth(pressResume.getFitWidth() - 30);
+        Texture Resume = createSprite("ui/resumeimage.png");
+        Resume.setFitWidth(Resume.getFitWidth() - 310);
 
-        pressResume = createSprite("ui/resumeimage.png");
-        pressResume.setFitWidth(pressResume.getFitWidth() - 30);
+        Button pressResume = new Button();
+        pressResume.setPrefWidth(pressResume.getWidth());
+        pressResume.setOnAction(e -> fireResume());
 
-        // Criação do botão personalizado
-        Button btnResume = new Button("Retomar Partida");
+        Texture Quit = createSprite("ui/quitimage.png");
+        Quit.setFitWidth(Quit.getFitWidth() - 308);
         
-        // Ação principal do FXGL para fechar o menu e voltar ao jogo
-        btnResume.setOnAction(e -> fireResume());
+        Button pressQuit = new Button();
+        pressQuit.setPrefWidth(pressQuit.getWidth() - 308);
+        pressQuit.setOnAction(e -> fireExitToMainMenu());
 
-        // Adicionando um botão de sair como extra
-        Button btnSair = new Button("Sair para o Menu Principal");
-        btnSair.setOnAction(e -> fireExitToMainMenu());
+        VBox box = new VBox(Resume, Quit, pressResume, pressQuit);
 
-        // Organizando na tela
-        VBox box = new VBox(20, btnResume, btnSair);
-        box.setTranslateX(getAppWidth() / 2.0 - 100);
-        box.setTranslateY(getAppHeight() / 2.0 - 50);
-
-        // Adicionando a interface ao painel (root) do menu
         getContentRoot().getChildren().add(box);
     }
 }
