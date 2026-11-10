@@ -1,9 +1,10 @@
 package com.pacmanjava.consumables;
 
-import com.pacmanjava.map.Lvl;
-import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.texture.Texture;
+import com.pacmanjava.map.Lvl;
 import javafx.geometry.Rectangle2D;
+
 import java.util.LinkedList;
 
 import static com.almasb.fxgl.dsl.FXGL.*;

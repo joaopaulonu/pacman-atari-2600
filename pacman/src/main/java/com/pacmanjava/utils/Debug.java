@@ -1,8 +1,8 @@
 package com.pacmanjava.utils;
 
 import com.almasb.fxgl.entity.components.IrremovableComponent;
-import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 

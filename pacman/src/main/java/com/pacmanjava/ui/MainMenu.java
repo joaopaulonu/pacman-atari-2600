@@ -2,12 +2,12 @@ package com.pacmanjava.ui;
 
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
-import com.almasb.fxgl.texture.Texture;
-import com.almasb.fxgl.input.TriggerListener;
 import com.almasb.fxgl.input.Trigger;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.paint.Color;
+import com.almasb.fxgl.input.TriggerListener;
+import com.almasb.fxgl.texture.Texture;
 import com.pacmanjava.consumables.Consumable;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import static com.pacmanjava.utils.Utils.*;
 

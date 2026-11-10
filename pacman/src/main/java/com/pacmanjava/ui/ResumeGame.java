@@ -1,15 +1,15 @@
 package com.pacmanjava.ui;
 
-import static com.pacmanjava.utils.Utils.createSprite;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
-
 import javafx.scene.control.Button;
-import javafx.scene.layout.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import static com.pacmanjava.utils.Utils.createSprite;
 
 public class ResumeGame extends FXGLMenu {
 

@@ -1,13 +1,12 @@
 package com.pacmanjava.map;
 
-import java.util.Scanner;
+import com.almasb.fxgl.texture.Texture;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-
-import com.almasb.fxgl.texture.Texture;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.paint.Color;
+import java.util.Scanner;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
