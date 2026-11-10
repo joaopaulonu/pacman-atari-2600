@@ -3,44 +3,59 @@ package com.pacmanjava.ui;
 import static com.pacmanjava.utils.Utils.createSprite;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class ResumeGame extends FXGLMenu {
 
     public ResumeGame() {
         super(MenuType.GAME_MENU);
 
-        Texture pause = createSprite("ui/pausedimage.png");
-        pause.setFitWidth(pause.getFitWidth() - 96);
+        double screenw = FXGL.getAppWidth();
+        double screenh = FXGL.getAppHeight();
+        Rectangle fundoPreto = new Rectangle(screenw, screenh);
+        fundoPreto.setFill(Color.color(0, 0, 0, 0.8));
+        getContentRoot().getChildren().add(fundoPreto);
 
-        Texture Resume = createSprite("ui/resumeimage.png");
-        Resume.setFitWidth(250);
-        Resume.setFitHeight(290);
+        Texture pause = createSprite("ui/pausedimage.png");
+        pause.setPreserveRatio(true);
+        pause.setFitWidth(50);
+        pause.setTranslateX(94);
+        pause.setTranslateY(109);
+
+        Texture resume = createSprite("ui/resumeimage.png");
+        resume.setPreserveRatio(true);
+        resume.setFitWidth(150);
+        resume.setTranslateX(45);
+        resume.setTranslateY(115);
+
+        Texture quit = createSprite("ui/quitimage.png");
+        quit.setPreserveRatio(true);
+        quit.setFitWidth(150);
+        quit.setTranslateX(45);
+        quit.setTranslateY(125);
+
 
         Button pressResume = new Button();
-        pressResume.setPrefWidth(250);
-        pressResume.setPrefHeight(150);
-        pressResume.setStyle("-fx-background-image: url('/assets/textures/ui/resumeimage.png'); \" +\n" + //
-                        "    \"-fx-background-repeat: no-repeat; \" + // Evita que a imagem se multiplique\n" + //
-                        "    \"-fx-background-color: transparent;");
+        pressResume.setStyle("-fx-background-color: transparent;");
+        pressResume.setPrefSize(150, 20);
+        pressResume.setTranslateX(45);
+        pressResume.setTranslateY(65);
         pressResume.setOnAction(e -> fireResume());
-
-        Texture Quit = createSprite("ui/quitimage.png");
-        Quit.setFitWidth(250);
-        Quit.setFitHeight(230);
         
         Button pressQuit = new Button();
-        pressQuit.setPrefWidth(250);
-        pressQuit.setPrefHeight(100);
-        pressResume.setStyle("-fx-background-image: url('/assets/textures/ui/resumeimage.png'); \" +\n" + //
-                        "    \"-fx-background-repeat: no-repeat; \" + // Evita que a imagem se multiplique\n" + //
-                        "    \"-fx-background-color: transparent;");
+        pressQuit.setStyle("-fx-background-color: transparent;");
+        pressQuit.setPrefSize(150, 20);
+        pressQuit.setTranslateX(45);
+        pressQuit.setTranslateY(75);
         pressQuit.setOnAction(e -> fireExitToMainMenu());
 
-        VBox box = new VBox(Resume, Quit, pressResume, pressQuit);
+        VBox box = new VBox(pause,resume,quit,pressResume,pressQuit);
 
         getContentRoot().getChildren().add(box);
     }
