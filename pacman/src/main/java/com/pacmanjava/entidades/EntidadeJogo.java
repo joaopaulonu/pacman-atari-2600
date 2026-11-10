@@ -4,8 +4,8 @@ import com.almasb.fxgl.entity.Entity;
 import com.pacmanjava.map.Lvl;
 import javafx.util.Duration;
 
-import static com.pacmanjava.utils.Utils.*;
 import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.pacmanjava.utils.Utils.*;
 
 public abstract class EntidadeJogo {
     protected int posX;

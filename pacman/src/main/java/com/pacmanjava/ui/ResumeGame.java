@@ -1,19 +1,27 @@
 package com.pacmanjava.ui;
 
+<<<<<<< HEAD
 import static com.almasb.fxgl.dsl.FXGL.set;
 import static com.pacmanjava.utils.Utils.createSprite;
+=======
+>>>>>>> cc209f1d50b61a690f94564f5e0a31f19ff5fd7c
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.input.Trigger;
 import com.almasb.fxgl.input.TriggerListener;
 import com.almasb.fxgl.texture.Texture;
+<<<<<<< HEAD
 import com.pacmanjava.consumables.Consumable;
 
+=======
+>>>>>>> cc209f1d50b61a690f94564f5e0a31f19ff5fd7c
 import javafx.scene.control.Button;
-import javafx.scene.layout.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import static com.pacmanjava.utils.Utils.createSprite;
 
 public class ResumeGame extends FXGLMenu {
 

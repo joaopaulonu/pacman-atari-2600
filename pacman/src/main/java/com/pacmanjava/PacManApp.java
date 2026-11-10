@@ -4,17 +4,16 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
-import javafx.scene.input.KeyCode;
-import java.util.Map;
-import com.pacmanjava.entidades.PacMan;
 import com.pacmanjava.consumables.Consumable;
-import com.almasb.fxgl.entity.Entity;
+import com.pacmanjava.entidades.PacMan;
+import com.pacmanjava.map.Lvl;
 import com.pacmanjava.ui.MainMenu;
 import com.pacmanjava.ui.ResumeGame;
-import com.pacmanjava.map.Lvl;
 import com.pacmanjava.utils.Debug;
-import com.pacmanjava.utils.Utils.GhostSprite;
+import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
+
+import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;

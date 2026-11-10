@@ -1,14 +1,14 @@
 package com.pacmanjava.utils;
 
-import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.animation.Animation;
+import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.texture.ImagesKt;
 import com.almasb.fxgl.texture.Texture;
-import javafx.util.Duration;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
