@@ -1,10 +1,14 @@
 package com.pacmanjava.ui;
 
+import static com.almasb.fxgl.dsl.FXGL.set;
 import static com.pacmanjava.utils.Utils.createSprite;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.input.Trigger;
+import com.almasb.fxgl.input.TriggerListener;
 import com.almasb.fxgl.texture.Texture;
+import com.pacmanjava.consumables.Consumable;
 
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
@@ -28,18 +32,41 @@ public class ResumeGame extends FXGLMenu {
         pause.setTranslateX(94);
         pause.setTranslateY(109);
 
+        Texture resume1 = createSprite("ui/resumeimage.png");
+        resume1.setPreserveRatio(true);
+        resume1.setFitWidth(150);
+        resume1.setTranslateX(45);
+        resume1.setTranslateY(115);
+
+        Texture resume2 = createSprite("ui/resumeimage2.png");
+        resume2.setPreserveRatio(true);
+        resume2.setFitWidth(150);
+        resume2.setTranslateX(45);
+        resume2.setTranslateY(115);
+
         Texture resume = createSprite("ui/resumeimage.png");
         resume.setPreserveRatio(true);
         resume.setFitWidth(150);
         resume.setTranslateX(45);
         resume.setTranslateY(115);
 
+        Texture quit1 = createSprite("ui/quitimage.png");
+        quit1.setPreserveRatio(true);
+        quit1.setFitWidth(150);
+        quit1.setTranslateX(45);
+        quit1.setTranslateY(125);
+
+        Texture quit2 = createSprite("ui/quitimage2.png");
+        quit2.setPreserveRatio(true);
+        quit2.setFitWidth(150);
+        quit2.setTranslateX(45);
+        quit2.setTranslateY(125);
+
         Texture quit = createSprite("ui/quitimage.png");
         quit.setPreserveRatio(true);
         quit.setFitWidth(150);
         quit.setTranslateX(45);
         quit.setTranslateY(125);
-
 
         Button pressResume = new Button();
         pressResume.setStyle("-fx-background-color: transparent;");
@@ -58,5 +85,21 @@ public class ResumeGame extends FXGLMenu {
         VBox box = new VBox(pause,resume,quit,pressResume,pressQuit);
 
         getContentRoot().getChildren().add(box);
+
+        pressResume.setOnMouseEntered(e -> {
+            resume.set(resume2);
+        });
+
+        pressResume.setOnMouseExited(e -> {
+            resume.set(resume1);
+        });
+
+        pressQuit.setOnMouseEntered(e -> {
+            quit.set(quit2);
+        });
+
+        pressQuit.setOnMouseExited(e -> {
+            quit.set(quit1);
+        });
     }
 }
