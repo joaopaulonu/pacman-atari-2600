@@ -99,7 +99,7 @@ public class Utils {
             scaledFrameSize = frameSize * UPSCALE_FACTOR;
 
             animIdle = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(1), 0, 0);
-            animEat = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(0.3), 0, 3);
+            animEat = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(0.2), 0, 3);
             animDying = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(2), 3, 14);
 
             texture = new AnimatedTexture(animIdle);

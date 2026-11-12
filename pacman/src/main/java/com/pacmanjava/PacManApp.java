@@ -101,18 +101,48 @@ public class PacManApp extends GameApplication {
     protected void onUpdate(double tpf) {
         Debug.updateFps(tpf);
 
+        
+
         if (Dot.getConsumed() >= 70 && !bonus) {
-            Fruit.placeFruit((byte) 4);
+            switch(Lvl.getStage()) {
+                case 1 -> Fruit.placeFruit((byte) 4);
+                case 2 -> Fruit.placeFruit((byte) 5);
+                case 3 -> Fruit.placeFruit((byte) 6);
+                case 4 -> Fruit.placeFruit((byte) 6);
+                case 5 -> Fruit.placeFruit((byte) 7);
+                case 6 -> Fruit.placeFruit((byte) 7);
+                case 7 -> Fruit.placeFruit((byte) 8);
+                case 8 -> Fruit.placeFruit((byte) 8);
+                case 9 -> Fruit.placeFruit((byte) 9);
+                case 10 -> Fruit.placeFruit((byte) 9);
+                case 11 -> Fruit.placeFruit((byte) 10);
+                case 12 -> Fruit.placeFruit((byte) 10);
+                default -> Fruit.placeFruit((byte) 11);
+            }
             bonus = true;
         }
 
         if (Dot.getConsumed() >= 170 && !bonus2) {
-            Fruit.placeFruit((byte) 4);
+            switch(Lvl.getStage()) {
+                case 1 -> Fruit.placeFruit((byte) 4);
+                case 2 -> Fruit.placeFruit((byte) 5);
+                case 3 -> Fruit.placeFruit((byte) 6);
+                case 4 -> Fruit.placeFruit((byte) 6);
+                case 5 -> Fruit.placeFruit((byte) 7);
+                case 6 -> Fruit.placeFruit((byte) 7);
+                case 7 -> Fruit.placeFruit((byte) 8);
+                case 8 -> Fruit.placeFruit((byte) 8);
+                case 9 -> Fruit.placeFruit((byte) 9);
+                case 10 -> Fruit.placeFruit((byte) 9);
+                case 11 -> Fruit.placeFruit((byte) 10);
+                case 12 -> Fruit.placeFruit((byte) 10);
+                default -> Fruit.placeFruit((byte) 11);
+            }
             bonus2 = true;
         }
 
         if (Dot.getConsumed() == 244) {
-            pacman.setDead(true);
+            Lvl.win();
         }
     }
 
