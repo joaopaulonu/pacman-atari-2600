@@ -72,7 +72,7 @@ public class PacMan extends EntidadeJogo {
     private void playSiren() {
         switch(Dot.getConsumed()) {
             case 0:
-                if (bufferDirection != "" && playedSiren == 0) {
+                if (currentDirection != "" && playedSiren == 0) {
                     siren.getAudio().play();
                     timerAction = getGameTimer().runAtInterval(() -> {
                         siren.getAudio().play();
@@ -98,7 +98,7 @@ public class PacMan extends EntidadeJogo {
                         siren2.getAudio().play();
                         timerAction = getGameTimer().runAtInterval(() -> {
                             siren2.getAudio().play();
-                        }, Duration.millis(290));
+                        }, Duration.millis(320));
                         playedSiren++;
                     }
                     break;
@@ -109,7 +109,7 @@ public class PacMan extends EntidadeJogo {
                         siren3.getAudio().play();
                         timerAction = getGameTimer().runAtInterval(() -> {
                             siren3.getAudio().play();
-                        }, Duration.millis(240));
+                        }, Duration.millis(300));
                         playedSiren++;
                     }
                     break;
@@ -120,7 +120,7 @@ public class PacMan extends EntidadeJogo {
                         siren4.getAudio().play();
                         timerAction = getGameTimer().runAtInterval(() -> {
                             siren4.getAudio().play();
-                        }, Duration.millis(190));
+                        }, Duration.millis(280));
                         playedSiren++;
                     }
                     break;
@@ -138,6 +138,9 @@ public class PacMan extends EntidadeJogo {
         }
 
         if (Lvl.getWin()) {
+            if (timerAction != null) {
+                timerAction.expire();
+            }
             entity.getComponent(PacmanSprite.class).idle();
             return;
         }
@@ -163,7 +166,7 @@ public class PacMan extends EntidadeJogo {
         }
 
         if (spawned) {
-            if (!bufferDirection.equals("") && getTileInFront(bufferDirection) != 1) {
+            if (!bufferDirection.equals("") && getTileInFront(bufferDirection) != 1 && getTileInFront(bufferDirection) != 2) {
                 currentDirection = bufferDirection;
                 spawned = false;
             }
@@ -175,7 +178,7 @@ public class PacMan extends EntidadeJogo {
 
         //atualiza a direção do jogador
         if (onTile()) {
-            if (currentDirection != bufferDirection && getTileInFront(bufferDirection) != 1) {
+            if (currentDirection != bufferDirection && getTileInFront(bufferDirection) != 1 && getTileInFront(bufferDirection) != 2) {
                 currentDirection = bufferDirection;
                 
                 //alinha exatamente no centro do tile
@@ -186,7 +189,7 @@ public class PacMan extends EntidadeJogo {
             }
 
             //colisão com as paredes
-            if (getTileInFront(currentDirection) == 1) {
+            if (getTileInFront(currentDirection) == 1 || getTileInFront(currentDirection) == 2) {
                 currentDirection = "";
 
                 //alinha exatamente no centro do tile

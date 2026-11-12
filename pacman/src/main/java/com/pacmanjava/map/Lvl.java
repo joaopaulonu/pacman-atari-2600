@@ -57,7 +57,6 @@ public class Lvl {
         rect.setStrokeWidth(16);
 
         getGameScene().setBackgroundColor(Color.BLACK);
-
         getGameScene().addUINodes(map, rect);
     }
     

@@ -22,6 +22,7 @@ import static com.pacmanjava.utils.Utils.*;
 
 public class PacManApp extends GameApplication {
     private PacMan pacman;
+    private byte fruit = 4;
     private boolean bonus = false;
     private boolean bonus2 = false;
 
@@ -60,10 +61,28 @@ public class PacManApp extends GameApplication {
         //intro (musica e pausa o jogador)
         play("start.wav");
         pacman.pause();
+        setCanMove(false);
+        setInputBufferDirection("");
         runOnce(() -> {
-            setInputBufferDirection("");
+            setCanMove(true);
             pacman.resume();
         }, Duration.seconds(4));
+
+        switch(Lvl.getStage()) {
+            case 1 -> fruit = (byte) 4;
+            case 2 -> fruit = (byte) 5;
+            case 3 -> fruit = (byte) 6;
+            case 4 -> fruit = (byte) 6;
+            case 5 -> fruit = (byte) 7;
+            case 6 -> fruit = (byte) 7;
+            case 7 -> fruit = (byte) 8;
+            case 8 -> fruit = (byte) 8;
+            case 9 -> fruit = (byte) 9;
+            case 10 -> fruit = (byte) 9;
+            case 11 -> fruit = (byte) 10;
+            case 12 -> fruit = (byte) 10;
+            default -> fruit = (byte) 11;
+        }
 
         bonus = false;
         bonus2 = false;
@@ -73,16 +92,24 @@ public class PacManApp extends GameApplication {
     @Override
     protected void initInput() {
         onKey(KeyCode.RIGHT, () -> {
-            setInputBufferDirection("RIGHT");
+            if (canMove()) {
+                setInputBufferDirection("RIGHT");
+            }
         });
         onKey(KeyCode.LEFT, () -> {
-            setInputBufferDirection("LEFT");
+            if (canMove()) {
+                setInputBufferDirection("LEFT");
+            }
         });
         onKey(KeyCode.UP, () -> {
-            setInputBufferDirection("UP");
+            if (canMove()) {
+                setInputBufferDirection("UP");
+            }
         });
         onKey(KeyCode.DOWN, () -> {
-            setInputBufferDirection("DOWN");
+            if (canMove()) {
+                setInputBufferDirection("DOWN");
+            }
         });
     }
 
@@ -104,40 +131,12 @@ public class PacManApp extends GameApplication {
         
 
         if (Dot.getConsumed() >= 70 && !bonus) {
-            switch(Lvl.getStage()) {
-                case 1 -> Fruit.placeFruit((byte) 4);
-                case 2 -> Fruit.placeFruit((byte) 5);
-                case 3 -> Fruit.placeFruit((byte) 6);
-                case 4 -> Fruit.placeFruit((byte) 6);
-                case 5 -> Fruit.placeFruit((byte) 7);
-                case 6 -> Fruit.placeFruit((byte) 7);
-                case 7 -> Fruit.placeFruit((byte) 8);
-                case 8 -> Fruit.placeFruit((byte) 8);
-                case 9 -> Fruit.placeFruit((byte) 9);
-                case 10 -> Fruit.placeFruit((byte) 9);
-                case 11 -> Fruit.placeFruit((byte) 10);
-                case 12 -> Fruit.placeFruit((byte) 10);
-                default -> Fruit.placeFruit((byte) 11);
-            }
+            Fruit.placeFruit(fruit);
             bonus = true;
         }
 
         if (Dot.getConsumed() >= 170 && !bonus2) {
-            switch(Lvl.getStage()) {
-                case 1 -> Fruit.placeFruit((byte) 4);
-                case 2 -> Fruit.placeFruit((byte) 5);
-                case 3 -> Fruit.placeFruit((byte) 6);
-                case 4 -> Fruit.placeFruit((byte) 6);
-                case 5 -> Fruit.placeFruit((byte) 7);
-                case 6 -> Fruit.placeFruit((byte) 7);
-                case 7 -> Fruit.placeFruit((byte) 8);
-                case 8 -> Fruit.placeFruit((byte) 8);
-                case 9 -> Fruit.placeFruit((byte) 9);
-                case 10 -> Fruit.placeFruit((byte) 9);
-                case 11 -> Fruit.placeFruit((byte) 10);
-                case 12 -> Fruit.placeFruit((byte) 10);
-                default -> Fruit.placeFruit((byte) 11);
-            }
+            Fruit.placeFruit(fruit);
             bonus2 = true;
         }
 

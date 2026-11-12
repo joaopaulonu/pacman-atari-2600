@@ -18,12 +18,20 @@ public class Utils {
 
     private static final int UPSCALE_FACTOR = 10;
     private static String inputBufferDirection = ""; //guarda o input do jogador
+    private static boolean canMove = false;
 
     public static String getInputBufferDirection() { 
         return inputBufferDirection; 
     }
     public static void setInputBufferDirection(String direction) { 
         inputBufferDirection = direction; 
+    }
+
+    public static boolean canMove() {
+        return canMove;
+    }
+    public static void setCanMove(boolean c) {
+        canMove = c;
     }
 
     //cria uma textura sem Anti-Aliasing

@@ -3,6 +3,8 @@ package com.pacmanjava.consumables;
 import com.almasb.fxgl.texture.Texture;
 import com.pacmanjava.map.Lvl;
 import javafx.geometry.Rectangle2D;
+import javafx.util.Duration;
+import com.almasb.fxgl.time.TimerAction;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
@@ -10,6 +12,7 @@ import static com.pacmanjava.utils.Utils.*;
 public class Dot extends Consumable {
     private static int consumed = 0;
     private static boolean flip = true;
+    private boolean hide = false;
 
     public void consume() {
         super.consume();
@@ -41,6 +44,16 @@ public class Dot extends Consumable {
             dots = texture.subTexture(new Rectangle2D(0, 0, 100, 100));
         } else {
             dots = texture.subTexture(new Rectangle2D(100, 0, 100, 100));
+            getGameTimer().runAtInterval(() -> {
+                if (!getInputBufferDirection().equals("")) {
+                    hide = !hide;
+                    if (hide) {
+                        dots.setOpacity(0.0);
+                    } else {
+                        dots.setOpacity(1.0);
+                    }
+                }
+            }, Duration.seconds(0.15));
         }
 
         dots.setFitHeight(10);
