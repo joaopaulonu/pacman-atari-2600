@@ -3,6 +3,7 @@ package com.pacmanjava.consumables;
 import com.almasb.fxgl.texture.Texture;
 import com.pacmanjava.map.Lvl;
 import javafx.geometry.Rectangle2D;
+import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
@@ -39,6 +40,15 @@ public class Fruit extends Consumable {
 
     //instancia todos os consumiveis no mapa
     public static void placeFruit(byte id) {
-        consumables.add(new Fruit(id, 15, 21));
+        Fruit fruit = new Fruit(id, 15, 21);
+        consumables.add(fruit);
+        runOnce(() -> {
+            if (getConsumable(15, 21) != null) {
+                consumables.remove(fruit);;
+                Lvl.level[21][15] = 0;
+                Lvl.level[21][14] = 0;
+                fruit.entity.removeFromWorld();
+            }
+        }, Duration.seconds(8));
     }
 }

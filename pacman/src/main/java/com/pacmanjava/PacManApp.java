@@ -22,6 +22,8 @@ import static com.pacmanjava.utils.Utils.*;
 
 public class PacManApp extends GameApplication {
     private PacMan pacman;
+    private boolean bonus = false;
+    private boolean bonus2 = false;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -62,6 +64,9 @@ public class PacManApp extends GameApplication {
             setInputBufferDirection("");
             pacman.resume();
         }, Duration.seconds(4));
+
+        bonus = false;
+        bonus2 = false;
     }
 
     //adiciona e cria as interações dos controles do jogo
@@ -91,9 +96,6 @@ public class PacManApp extends GameApplication {
     protected void initGameVars(Map<String, Object> vars) {
         vars.put("fps", 0);
     }
-
-    private boolean bonus = false;
-    private boolean bonus2 = false;
 
     @Override
     protected void onUpdate(double tpf) {

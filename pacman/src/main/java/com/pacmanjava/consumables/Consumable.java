@@ -28,6 +28,7 @@ public class Consumable {
             }
             c.entity.removeFromWorld();
         }
+        Dot.setConsumed(0);
 
         consumables.clear();
     }

@@ -4,6 +4,7 @@ import com.almasb.fxgl.audio.Sound;
 import javafx.util.Duration;
 import com.almasb.fxgl.time.TimerAction;
 import com.pacmanjava.consumables.Consumable;
+import com.pacmanjava.consumables.Dot;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
@@ -12,7 +13,7 @@ public class PacMan extends EntidadeJogo {
 
     private boolean dying;
     private float deathAnimationTime = 0;
-    private Sound death, siren;
+    private Sound death, siren, siren1, siren2, siren3, siren4;
     private TimerAction timerAction;
 
     public PacMan() {
@@ -24,6 +25,10 @@ public class PacMan extends EntidadeJogo {
         speed = 60;
         death = getAssetLoader().loadSound("death.wav");
         siren = getAssetLoader().loadSound("siren0.wav");
+        siren1 = getAssetLoader().loadSound("siren1.wav");
+        siren2 = getAssetLoader().loadSound("siren2.wav");
+        siren3 = getAssetLoader().loadSound("siren3.wav");
+        siren4 = getAssetLoader().loadSound("siren4.wav");
     }
 
     public void setDead(boolean dead) {
@@ -32,6 +37,10 @@ public class PacMan extends EntidadeJogo {
 
     private boolean playedDeath = false; //se já tocou o audio de morte
     private boolean playedSiren = false; //se já tocou o audio do alarme
+    private boolean playedSiren1 = false; //se já tocou o audio do alarme
+    private boolean playedSiren2 = false; //se já tocou o audio do alarme
+    private boolean playedSiren3 = false; //se já tocou o audio do alarme
+    private boolean playedSiren4 = false; //se já tocou o audio do alarme
 
     //faz a animação de morte
     private void playDeathAnimation(double tpf) {
@@ -72,12 +81,60 @@ public class PacMan extends EntidadeJogo {
         }
 
         //audio do alarme
-        if (bufferDirection != "" && !playedSiren) {
-            siren.getAudio().play();
-            timerAction = getGameTimer().runAtInterval(() -> {
-                siren.getAudio().play();
-            }, Duration.millis(400));
-            playedSiren = true;
+        switch(Dot.getConsumed()) {
+            case 0:
+                if (bufferDirection != "" && !playedSiren) {
+                    siren.getAudio().play();
+                    timerAction = getGameTimer().runAtInterval(() -> {
+                        siren.getAudio().play();
+                    }, Duration.millis(380));
+                    playedSiren = true;
+                }
+                break;
+            case 116:
+                if (!playedSiren1) {
+                    timerAction.expire();
+                    siren.getAudio().stop();
+                    siren1.getAudio().play();
+                    timerAction = getGameTimer().runAtInterval(() -> {
+                        siren1.getAudio().play();
+                    }, Duration.millis(330));
+                    playedSiren1 = true;
+                }
+                break;
+            case 180:
+                if (!playedSiren2) {
+                    timerAction.expire();
+                    siren.getAudio().stop();
+                    siren2.getAudio().play();
+                    timerAction = getGameTimer().runAtInterval(() -> {
+                        siren2.getAudio().play();
+                    }, Duration.millis(280));
+                    playedSiren2 = true;
+                }
+                break;
+            case 212:
+                if (!playedSiren3) {
+                    timerAction.expire();
+                    siren.getAudio().stop();
+                    siren3.getAudio().play();
+                    timerAction = getGameTimer().runAtInterval(() -> {
+                        siren3.getAudio().play();
+                    }, Duration.millis(230));
+                    playedSiren3 = true;
+                }
+                break;
+            case 228:
+                if (!playedSiren4) {
+                    timerAction.expire();
+                    siren.getAudio().stop();
+                    siren4.getAudio().play();
+                    timerAction = getGameTimer().runAtInterval(() -> {
+                        siren4.getAudio().play();
+                    }, Duration.millis(180));
+                    playedSiren4 = true;
+                }
+                break;
         }
 
         if (paused) { return; } //não passaa de aqui se o pac-man é pausado
