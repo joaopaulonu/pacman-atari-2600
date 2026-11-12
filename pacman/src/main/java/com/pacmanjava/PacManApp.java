@@ -5,6 +5,8 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.pacmanjava.consumables.Consumable;
+import com.pacmanjava.consumables.Dot;
+import com.pacmanjava.consumables.Fruit;
 import com.pacmanjava.entidades.PacMan;
 import com.pacmanjava.map.Lvl;
 import com.pacmanjava.ui.MainMenu;
@@ -19,6 +21,8 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
 
 public class PacManApp extends GameApplication {
+    private PacMan pacman;
+
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setWidth(WIDTH);
@@ -47,9 +51,9 @@ public class PacManApp extends GameApplication {
     @Override
     protected void initGame() {
         Lvl.createLevelMatrix("tilemap.txt");
-        Consumable.placeConsumables();
+        Dot.placeDots();
 
-        PacMan pacman = new PacMan();
+        pacman = new PacMan();
 
         //intro (musica e pausa o jogador)
         play("start.wav");
@@ -88,9 +92,26 @@ public class PacManApp extends GameApplication {
         vars.put("fps", 0);
     }
 
+    private boolean bonus = false;
+    private boolean bonus2 = false;
+
     @Override
     protected void onUpdate(double tpf) {
         Debug.updateFps(tpf);
+
+        if (Dot.getConsumed() >= 70 && !bonus) {
+            Fruit.placeFruit((byte) 4);
+            bonus = true;
+        }
+
+        if (Dot.getConsumed() >= 170 && !bonus2) {
+            Fruit.placeFruit((byte) 4);
+            bonus2 = true;
+        }
+
+        if (Dot.getConsumed() == 244) {
+            pacman.setDead(true);
+        }
     }
 
     public static void main(String[] args) {

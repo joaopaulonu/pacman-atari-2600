@@ -1,6 +1,5 @@
 package com.pacmanjava.entidades;
 
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.audio.Sound;
 import javafx.util.Duration;
 import com.almasb.fxgl.time.TimerAction;
