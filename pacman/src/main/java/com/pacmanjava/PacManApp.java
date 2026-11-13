@@ -4,13 +4,14 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
-import com.pacmanjava.consumables.Consumable;
 import com.pacmanjava.consumables.Dot;
 import com.pacmanjava.consumables.Fruit;
 import com.pacmanjava.entidades.PacMan;
 import com.pacmanjava.map.Lvl;
 import com.pacmanjava.ui.MainMenu;
 import com.pacmanjava.ui.ResumeGame;
+import com.pacmanjava.ui.Loading;
+import com.almasb.fxgl.app.scene.LoadingScene;
 import com.pacmanjava.utils.Debug;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
@@ -42,10 +43,13 @@ public class PacManApp extends GameApplication {
             public FXGLMenu newMainMenu() {
                 return new MainMenu();
             }
-
             @Override
             public FXGLMenu newGameMenu() {
                 return new ResumeGame();
+            }
+            @Override
+            public LoadingScene newLoadingScene() {
+                return new Loading();
             }
         });
         Debug.showFps();
