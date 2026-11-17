@@ -1,5 +1,7 @@
 package com.pacmanjava.ui;
 
+import static com.almasb.fxgl.dsl.FXGL.getDialogService;
+import static com.almasb.fxgl.dsl.FXGL.getGameController;
 import static com.pacmanjava.utils.Utils.createSprite;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
@@ -76,7 +78,7 @@ public class ResumeGame extends FXGLMenu {
         pressQuit.setPrefSize(150, 20);
         pressQuit.setTranslateX(45);
         pressQuit.setTranslateY(75);
-        pressQuit.setOnAction(e -> fireExitToMainMenu());
+        pressQuit.setOnAction(e -> getController().gotoMainMenu());
 
         VBox box = new VBox(pause,resume,quit,pressResume,pressQuit);
 

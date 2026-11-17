@@ -4,12 +4,14 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.ui.DialogFactoryService;
 import com.pacmanjava.consumables.Dot;
 import com.pacmanjava.consumables.Fruit;
 import com.pacmanjava.entidades.PacMan;
 import com.pacmanjava.map.Lvl;
 import com.pacmanjava.ui.MainMenu;
 import com.pacmanjava.ui.ResumeGame;
+import com.pacmanjava.ui.ConfirmationPopUp;
 import com.pacmanjava.ui.Loading;
 import com.almasb.fxgl.app.scene.LoadingScene;
 import com.pacmanjava.utils.Debug;
@@ -38,6 +40,7 @@ public class PacManApp extends GameApplication {
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
+        settings.setEngineServiceProvider(DialogFactoryService.class, ConfirmationPopUp.class);
         settings.setSceneFactory(new SceneFactory() {
             @Override
             public FXGLMenu newMainMenu() {
