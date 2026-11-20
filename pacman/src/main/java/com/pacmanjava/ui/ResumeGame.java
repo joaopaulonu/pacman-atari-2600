@@ -1,7 +1,5 @@
 package com.pacmanjava.ui;
 
-import static com.almasb.fxgl.dsl.FXGL.getDialogService;
-import static com.almasb.fxgl.dsl.FXGL.getGameController;
 import static com.pacmanjava.utils.Utils.createSprite;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;

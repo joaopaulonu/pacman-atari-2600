@@ -17,8 +17,43 @@ public class Utils {
     public static final int HEIGHT = 304; //288 + 16
 
     private static final int UPSCALE_FACTOR = 10;
+    
     private static String inputBufferDirection = ""; //guarda o input do jogador
     private static boolean canMove = false;
+
+    public enum Direction {
+        RIGHT,
+        LEFT,
+        UP,
+        DOWN,
+        NONE;
+
+        public int x() {
+            switch(this) {
+                case RIGHT: return 1;
+                case LEFT: return -1;
+                default: return 0;
+            }
+        }
+
+        public int y() {
+            switch(this) {
+                case UP: return 1;
+                case DOWN: return -1;
+                default: return 0;
+            }
+        }
+
+        public Direction opposite() {
+            switch(this) {
+                case RIGHT: return LEFT;
+                case LEFT: return RIGHT;
+                case UP: return DOWN;
+                case DOWN: return UP;
+                default: return NONE;
+            }
+        }
+    }
 
     public static String getInputBufferDirection() { 
         return inputBufferDirection; 

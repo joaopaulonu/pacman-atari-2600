@@ -14,9 +14,20 @@ import static com.pacmanjava.utils.Utils.*;
 public class PacMan extends EntidadeJogo {
 
     private boolean dying;
+    private static int lives = 4;
     private float deathAnimationTime = 0;
     private Sound death, siren, siren1, siren2, siren3, siren4;
-    private TimerAction timerAction;
+    private static TimerAction timerAction;
+    private boolean movedAfterSpawn = false;
+    public boolean hasMovedAfterSpawn() {
+        return movedAfterSpawn;
+    }
+    public static int getLives() {
+        return lives;
+    }
+    public static void setLives(int l) {
+        lives = l;
+    }
 
     public PacMan() {
         this.entity = entityBuilder()
@@ -31,6 +42,7 @@ public class PacMan extends EntidadeJogo {
         siren2 = getAssetLoader().loadSound("siren2.wav");
         siren3 = getAssetLoader().loadSound("siren3.wav");
         siren4 = getAssetLoader().loadSound("siren4.wav");
+        movedAfterSpawn = false;
     }
 
     public void setDead(boolean dead) {
@@ -44,7 +56,7 @@ public class PacMan extends EntidadeJogo {
         siren.getAudio().stop();
         
         if (timerAction != null) {
-            timerAction.expire();
+            timerAction.pause();
         }
         
         bufferDirection = "";
@@ -65,11 +77,18 @@ public class PacMan extends EntidadeJogo {
         if (deathAnimationTime >= 4) {
             entity.getComponent(PacmanSprite.class).dead();
             dead = true;
+            movedAfterSpawn = false;
+            lives--;
+            //onPacmanLifeLost()
         }
     }
     
     private int playedSiren = 0; //se já tocou o audio do alarme
     private void playSiren() {
+        if (timerAction != null && timerAction.isPaused()) {
+            timerAction.resume();
+        }
+
         switch(Dot.getConsumed()) {
             case 0:
                 if (currentDirection != "" && playedSiren == 0) {
@@ -80,50 +99,50 @@ public class PacMan extends EntidadeJogo {
                     playedSiren++;
                 }
                 break;
-                case 116:
-                    if (playedSiren == 1) {
-                        timerAction.expire();
-                        siren.getAudio().stop();
+            case 116:
+                if (playedSiren == 1) {
+                    timerAction.expire();
+                    siren.getAudio().stop();
+                    siren1.getAudio().play();
+                    timerAction = getGameTimer().runAtInterval(() -> {
                         siren1.getAudio().play();
-                        timerAction = getGameTimer().runAtInterval(() -> {
-                            siren1.getAudio().play();
-                        }, Duration.millis(340));
-                        playedSiren++;
-                    }
-                    break;
-                case 180:
-                    if (playedSiren == 2) {
-                        timerAction.expire();
-                        siren.getAudio().stop();
+                    }, Duration.millis(340));
+                    playedSiren++;
+                }
+                break;
+            case 180:
+                if (playedSiren == 2) {
+                    timerAction.expire();
+                    siren.getAudio().stop();
+                    siren2.getAudio().play();
+                    timerAction = getGameTimer().runAtInterval(() -> {
                         siren2.getAudio().play();
-                        timerAction = getGameTimer().runAtInterval(() -> {
-                            siren2.getAudio().play();
-                        }, Duration.millis(320));
-                        playedSiren++;
-                    }
-                    break;
-                case 212:
-                    if (playedSiren == 3) {
-                        timerAction.expire();
-                        siren.getAudio().stop();
+                    }, Duration.millis(320));
+                    playedSiren++;
+                }
+                break;
+            case 212:
+                if (playedSiren == 3) {
+                    timerAction.expire();
+                    siren.getAudio().stop();
+                    siren3.getAudio().play();
+                    timerAction = getGameTimer().runAtInterval(() -> {
                         siren3.getAudio().play();
-                        timerAction = getGameTimer().runAtInterval(() -> {
-                            siren3.getAudio().play();
-                        }, Duration.millis(300));
-                        playedSiren++;
-                    }
-                    break;
-                case 228:
-                    if (playedSiren == 4) {
-                        timerAction.expire();
-                        siren.getAudio().stop();
+                    }, Duration.millis(300));
+                    playedSiren++;
+                }
+                break;
+            case 228:
+                if (playedSiren == 4) {
+                    timerAction.expire();
+                    siren.getAudio().stop();
+                    siren4.getAudio().play();
+                    timerAction = getGameTimer().runAtInterval(() -> {
                         siren4.getAudio().play();
-                        timerAction = getGameTimer().runAtInterval(() -> {
-                            siren4.getAudio().play();
-                        }, Duration.millis(280));
-                        playedSiren++;
-                    }
-                    break;
+                    }, Duration.millis(280));
+                    playedSiren++;
+                }
+                break;
             }
         }
                     
@@ -169,6 +188,10 @@ public class PacMan extends EntidadeJogo {
             if (!bufferDirection.equals("") && getTileInFront(bufferDirection) != 1 && getTileInFront(bufferDirection) != 2) {
                 currentDirection = bufferDirection;
                 spawned = false;
+
+                if (!movedAfterSpawn) {
+                    movedAfterSpawn = true;
+                }
             }
         } else {
             if (bufferDirection.equals("")) {

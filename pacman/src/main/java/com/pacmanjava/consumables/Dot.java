@@ -2,20 +2,28 @@ package com.pacmanjava.consumables;
 
 import com.almasb.fxgl.texture.Texture;
 import com.pacmanjava.map.Lvl;
+import com.pacmanjava.PacManApp;
 import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
-import com.almasb.fxgl.time.TimerAction;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
 
 public class Dot extends Consumable {
+    public static final int TOTAL = 244;
+
     private static int consumed = 0;
     private static boolean flip = true;
     private boolean hide = false;
 
     public void consume() {
         super.consume();
+
+        /*
+        if (this.id == 4) {
+            onEnergizerEaten();
+        }
+        */
 
         if (flip) {
             play("eat_dot_0.wav");
@@ -45,14 +53,14 @@ public class Dot extends Consumable {
         } else {
             dots = texture.subTexture(new Rectangle2D(100, 0, 100, 100));
             getGameTimer().runAtInterval(() -> {
-                if (!getInputBufferDirection().equals("")) {
+                if (PacManApp.getPacMan() != null && PacManApp.getPacMan().hasMovedAfterSpawn()) {
                     hide = !hide;
                     if (hide) {
                         dots.setOpacity(0.0);
                     } else {
                         dots.setOpacity(1.0);
                     }
-                }
+                } else { dots.setOpacity(1.0); }
             }, Duration.seconds(0.15));
         }
 
@@ -73,8 +81,6 @@ public class Dot extends Consumable {
 
     //instancia todos os consumiveis no mapa
     public static void placeDots() {
-        setConsumed(0);
-
         for (int i = 0; i < HEIGHT / 8; i++) {
             for (int j = 0; j < WIDTH / 8; j++) {
                 switch (Lvl.level[i][j]) {

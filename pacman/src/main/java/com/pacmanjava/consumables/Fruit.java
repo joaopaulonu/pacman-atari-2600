@@ -22,7 +22,7 @@ public class Fruit extends Consumable {
         Texture texture = createSprite("fruits.png");
         Texture fruits;
         
-        fruits = texture.subTexture(new Rectangle2D(0 + (160 * (id - 4)), 0, 160, 160));
+        fruits = texture.subTexture(new Rectangle2D(0 + (160 * (id - 5)), 0, 160, 160));
 
         fruits.setFitHeight(16);
         fruits.setFitWidth(16);

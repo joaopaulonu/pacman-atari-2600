@@ -3,6 +3,7 @@ package com.pacmanjava.entidades;
 import com.almasb.fxgl.entity.Entity;
 import com.pacmanjava.map.Lvl;
 import javafx.util.Duration;
+import com.pacmanjava.entidades.fantasmas.Point;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
@@ -16,6 +17,14 @@ public abstract class EntidadeJogo {
     protected Entity entity;
     protected boolean dead = false;
     protected boolean paused = false;
+
+    public String getBufferDirection() {
+        return bufferDirection;
+    }
+
+    public boolean isDead() {
+        return dead;
+    }
 
     //verifica se a entidade tá dentro de um tile
     protected boolean onTile() {
@@ -37,7 +46,7 @@ public abstract class EntidadeJogo {
         int posTilesX = (posX - 4) / 8;
         int posTilesY = (posY - 4) / 8;
 
-        return Lvl.level[posTilesX][posTilesY];
+        return Lvl.level[posTilesY][posTilesX];
     }
 
     //pega o tile na frente da direção
