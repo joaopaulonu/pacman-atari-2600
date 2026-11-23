@@ -5,12 +5,17 @@ import java.util.List;
 
 import com.pacmanjava.entidades.Ghost;
 import com.pacmanjava.entidades.Ghost.GhostState;
+import com.almasb.fxgl.audio.Sound;
+import com.almasb.fxgl.time.TimerAction;
 import com.pacmanjava.PacManApp;
 import com.pacmanjava.map.Lvl;
 import com.pacmanjava.utils.Utils.Direction;
 
+import javafx.util.Duration;
+
 import static com.pacmanjava.entidades.Ghost.GhostState;
 
+import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
 
 public final class PacmanGameOrchestrator {
@@ -27,10 +32,14 @@ public final class PacmanGameOrchestrator {
     private boolean pinkyReleased;
     private boolean inkyReleased;
     private boolean clydeReleased;
+    private TimerAction frightLoop, eyesLoop;
+    private Sound frightSound, eyesSound;
 
     public PacmanGameOrchestrator(LevelSettings level, Blinky blinky, Pinky pinky, Inky inky, Clyde clyde) {
         this.level = level;
         this.blinky = blinky;
+        frightSound = getAssetLoader().loadSound("fright.wav");
+        eyesSound = getAssetLoader().loadSound("eyes.wav");
 
         // Ordem fixa de atualização do arcade: Blinky, Pinky, Inky, Clyde
         this.ghosts = List.of(blinky, pinky, inky, clyde);
@@ -39,7 +48,6 @@ public final class PacmanGameOrchestrator {
     //update loop
     public void update(double deltaSeconds, Point pacmanTile, Direction pacmanDirection, int dotsRemaining) {
         if (!PacManApp.getPacMan().hasMovedAfterSpawn()
-            || PacManApp.getPacMan().isPaused()
             || PacManApp.getPacMan().isDead()
             || PacManApp.getPacMan().isDying()
             || Lvl.getWin()) {
@@ -64,13 +72,62 @@ public final class PacmanGameOrchestrator {
         }
         frightenedRemaining = seconds;
         ghosts.forEach(Ghost::frighten);
+
+        if (frightLoop == null) {
+            
+            frightSound.getAudio().play();
+            frightLoop = getGameTimer().runAtInterval(() -> {
+                boolean eaten = false;
+                boolean frightened = false;
+                for (Ghost g: ghosts) {
+                    if (g.state() == GhostState.EATEN) {
+                        eaten = true;
+                        break;
+                    }
+
+                    if (g.state() == GhostState.FRIGHTENED) {
+                        frightened = true;
+                        break;
+                    }
+                }
+
+                if (!eaten && frightened) {           
+                    frightSound.getAudio().play();
+                }
+            }, Duration.millis(1050));
+        }
     }
 
     public void onGhostEaten(Ghost ghost) {
         if (!ghosts.contains(ghost)) {
             throw new IllegalArgumentException("fantasma desconhecido");
         }
-        ghost.eat();
+        
+        eyesSound.getAudio().pause();
+        play("eat_ghost.wav");
+        PacManApp.getPacMan().pauseFor(Duration.seconds(1.2));
+        
+        for (Ghost g : ghosts) {
+            g.pauseFor(Duration.seconds(1.2));
+        }
+
+        if (eyesLoop == null) {
+            
+            eyesLoop = getGameTimer().runAtInterval(() -> {
+                boolean eaten = false;
+                for (Ghost g: ghosts) {
+                    if (!g.isPaused() && g.state() == GhostState.EATEN) {
+                        eaten = true;
+                        break;
+                    }
+                }
+
+                if (eaten) {    
+                    System.out.println("hi");       
+                    eyesSound.getAudio().play();
+                }
+            }, Duration.millis(600));
+        }
     }
 
     public void allowGhostToLeave(Ghost ghost) {

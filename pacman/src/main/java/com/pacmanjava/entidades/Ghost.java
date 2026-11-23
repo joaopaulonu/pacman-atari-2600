@@ -16,6 +16,9 @@ import javafx.util.Duration;
 import com.pacmanjava.entidades.fantasmas.GameContext;
 import com.pacmanjava.entidades.fantasmas.GridMap;
 import com.pacmanjava.entidades.fantasmas.LevelSettings;
+import com.pacmanjava.entidades.fantasmas.PacmanGameOrchestrator;
+import com.almasb.fxgl.audio.Sound;
+import com.almasb.fxgl.time.TimerAction;
 import com.pacmanjava.PacManApp;
 import com.pacmanjava.map.Lvl;
 import com.pacmanjava.consumables.Dot;
@@ -48,7 +51,7 @@ public abstract class Ghost extends EntidadeJogo {
     public static final Point CLASSIC_EXIT_TILE = new Point(13, 12);
 
     private static final double FULL_SPEED_TILES_PER_SECOND = 75.75 / 8.0;
-    private static final double EATEN_SPEED = 2.0;
+    private static final double EATEN_SPEED = 1.5;
     private static final Direction[] POSSIBLE_DIRECTIONS = {
         Direction.RIGHT,
         Direction.LEFT,
@@ -269,6 +272,8 @@ public abstract class Ghost extends EntidadeJogo {
             reversePending = true;
             houseRoute = null;
         }
+
+        PacManApp.getOrchestrator().onGhostEaten(this);
     }
 
     public final void beginHouseBounce(Point homePosition) {
@@ -316,16 +321,10 @@ public abstract class Ghost extends EntidadeJogo {
         if (dead) { return; }
 
         if (!PacManApp.getPacMan().hasMovedAfterSpawn()
-            || PacManApp.getPacMan().isPaused()
             || PacManApp.getPacMan().isDead()
             || PacManApp.getPacMan().isDying()
             || Lvl.getWin()) {
             pause();
-            return;
-        }
-
-        if (paused) {
-            resume();
             return;
         }
 

@@ -3,10 +3,8 @@ package com.pacmanjava.entidades;
 import com.almasb.fxgl.entity.Entity;
 import com.pacmanjava.map.Lvl;
 import com.pacmanjava.utils.Utils.Direction;
-import com.pacmanjava.utils.Utils.PacmanSprite;
 
 import javafx.util.Duration;
-import com.pacmanjava.entidades.fantasmas.Point;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
