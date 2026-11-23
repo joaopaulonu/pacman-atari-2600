@@ -2,9 +2,13 @@
 package com.pacmanjava.entidades.fantasmas;
 
 import java.util.List;
-import java.util.Objects;
 
 import com.pacmanjava.entidades.Ghost;
+import com.pacmanjava.entidades.Ghost.GhostState;
+import com.pacmanjava.PacManApp;
+import com.pacmanjava.map.Lvl;
+import com.pacmanjava.utils.Utils.Direction;
+
 import static com.pacmanjava.entidades.Ghost.GhostState;
 
 import static com.pacmanjava.utils.Utils.*;
@@ -19,6 +23,10 @@ public final class PacmanGameOrchestrator {
     private double phaseElapsed; //elapsed seconds of the phase
     private GhostState globalMode = GhostState.SCATTER; //ghost state
     private double frightenedRemaining; //remaining frightened seconds
+    private double houseExitElapsed;
+    private boolean pinkyReleased;
+    private boolean inkyReleased;
+    private boolean clydeReleased;
 
     public PacmanGameOrchestrator(LevelSettings level, Blinky blinky, Pinky pinky, Inky inky, Clyde clyde) {
         this.level = level;
@@ -30,14 +38,21 @@ public final class PacmanGameOrchestrator {
 
     //update loop
     public void update(double deltaSeconds, Point pacmanTile, Direction pacmanDirection, int dotsRemaining) {
+        if (!PacManApp.getPacMan().hasMovedAfterSpawn()
+            || PacManApp.getPacMan().isPaused()
+            || PacManApp.getPacMan().isDead()
+            || PacManApp.getPacMan().isDying()
+            || Lvl.getWin()) {
+            return;
+        }
+
         tickFrightened(deltaSeconds);
         if (frightenedRemaining == 0) { // o relógio Scatter/Chase pausa durante FRIGHTENED
             advanceSchedule(deltaSeconds);
         }
-        GameContext ctx = new GameContext(pacmanTile, pacmanDirection, dotsRemaining, level);
-        for (Ghost ghost : ghosts) {
-            ghost.update(deltaSeconds, ctx);
-        }
+        advanceHouseExitSchedule(deltaSeconds);
+        // A movimentação por pixel é executada por Ghost.handleMovement(), chamado pelo
+        // FixedUpdateComponent da entidade, como no movimento do Pac-Man.
     }
 
     //EnergizerEatenEvent
@@ -58,6 +73,13 @@ public final class PacmanGameOrchestrator {
         ghost.eat();
     }
 
+    public void allowGhostToLeave(Ghost ghost) {
+        if (!ghosts.contains(ghost)) {
+            throw new IllegalArgumentException("fantasma desconhecido");
+        }
+        ghost.requestHouseExit();
+    }
+
     /** Elroy é suspenso após a morte do Pac-Man até Clyde sair da casa. */
     public void onPacmanLifeLost() {
         blinky.setElroySuspended(true);
@@ -69,6 +91,10 @@ public final class PacmanGameOrchestrator {
 
     public GhostState globalMode() {
         return globalMode;
+    }
+
+    public double getFrightenedRemaining() {
+        return frightenedRemaining;
     }
 
     public List<Ghost> ghosts() {
@@ -84,6 +110,35 @@ public final class PacmanGameOrchestrator {
         if (frightenedRemaining <= 0) {
             frightenedRemaining = 0;
             ghosts.forEach(Ghost::endFright);
+        }
+    }
+
+    private void advanceHouseExitSchedule(double deltaSeconds) {
+        houseExitElapsed += deltaSeconds;
+
+        if (!pinkyReleased && houseExitElapsed >= 1.0) {
+            pinkyReleased = true;
+            for (Ghost ghost : ghosts) {
+                if (ghost instanceof Pinky) {
+                    allowGhostToLeave(ghost);
+                }
+            }
+        }
+        if (!inkyReleased && houseExitElapsed >= 3.0) {
+            inkyReleased = true;
+            for (Ghost ghost : ghosts) {
+                if (ghost instanceof Inky) {
+                    allowGhostToLeave(ghost);
+                }
+            }
+        }
+        if (!clydeReleased && houseExitElapsed >= 5.0) {
+            clydeReleased = true;
+            for (Ghost ghost : ghosts) {
+                if (ghost instanceof Clyde) {
+                    allowGhostToLeave(ghost);
+                }
+            }
         }
     }
 

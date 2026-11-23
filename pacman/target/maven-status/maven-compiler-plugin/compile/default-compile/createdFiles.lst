@@ -6,6 +6,7 @@ com\pacmanjava\entidades\EntidadeJogo.class
 com\pacmanjava\utils\Utils$AnimationComponent.class
 com\pacmanjava\entidades\PacMan.class
 com\pacmanjava\entidades\fantasmas\Blinky.class
+com\pacmanjava\entidades\EntidadeJogo$1.class
 com\pacmanjava\utils\Debug.class
 com\pacmanjava\entidades\fantasmas\Clyde.class
 com\pacmanjava\PacManApp.class
@@ -21,11 +22,13 @@ com\pacmanjava\ui\ConfirmationPopUp.class
 com\pacmanjava\utils\Utils.class
 com\pacmanjava\consumables\Dot.class
 com\pacmanjava\PacManApp$1.class
+com\pacmanjava\entidades\Ghost$1.class
 com\pacmanjava\utils\Utils$Direction.class
 com\pacmanjava\ui\Loading.class
 com\pacmanjava\ui\MainMenu$1.class
 com\pacmanjava\entidades\fantasmas\GameContext.class
 com\pacmanjava\consumables\Consumable.class
 com\pacmanjava\ui\ResumeGame.class
+com\pacmanjava\entidades\PacMan$1.class
 com\pacmanjava\consumables\Fruit.class
 com\pacmanjava\entidades\fantasmas\GridMap.class

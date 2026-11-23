@@ -6,6 +6,7 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.pacmanjava.consumables.Dot;
 import com.pacmanjava.consumables.Fruit;
+import com.pacmanjava.entidades.Ghost;
 import com.pacmanjava.entidades.PacMan;
 import com.pacmanjava.map.Lvl;
 import com.pacmanjava.ui.MainMenu;
@@ -13,11 +14,24 @@ import com.pacmanjava.ui.ResumeGame;
 import com.pacmanjava.ui.Loading;
 import com.almasb.fxgl.app.scene.LoadingScene;
 import com.pacmanjava.utils.Debug;
+import com.pacmanjava.utils.Utils.Direction;
+
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import com.almasb.fxgl.texture.Texture;
 
+import com.pacmanjava.entidades.fantasmas.Blinky;
+import com.pacmanjava.entidades.fantasmas.Pinky;
+import com.pacmanjava.entidades.fantasmas.Inky;
+import com.pacmanjava.entidades.fantasmas.Clyde;
+import com.pacmanjava.entidades.fantasmas.GridMap;
+import com.pacmanjava.entidades.fantasmas.PacmanGameOrchestrator;
+import com.pacmanjava.entidades.fantasmas.LevelSettings;
+import com.pacmanjava.entidades.fantasmas.Point;
+
 import java.util.Map;
+import java.util.random.RandomGenerator;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.pacmanjava.utils.Utils.*;
@@ -26,14 +40,25 @@ public class PacManApp extends GameApplication {
     public static boolean newGame = true;
 
     private static PacMan pacman;
+    private static Blinky blinky;
+    private static Pinky pinky;
+    private static Inky inky;
+    private static Clyde clyde;
+
+    private static PacmanGameOrchestrator gameOrchestrator;
     private static byte fruit = 4;
     private static boolean bonus = false;
     private static boolean bonus2 = false;
+    private boolean winGhostSequenceStarted;
 
     private Texture ready, gameOver;
 
     public static PacMan getPacMan() {
         return pacman;
+    }
+
+    public static PacmanGameOrchestrator getOrchestrator() {
+        return gameOrchestrator;
     }
 
     @Override
@@ -66,6 +91,8 @@ public class PacManApp extends GameApplication {
 
     @Override
     protected void initGame() {
+        winGhostSequenceStarted = false;
+
         if (newGame) {
             Lvl.createLevelMatrix("tilemap.txt");
             bonus = false;
@@ -74,6 +101,23 @@ public class PacManApp extends GameApplication {
 
         Dot.placeDots();
         pacman = new PacMan();
+        blinky = new Blinky(new GridMap(), new Point(13, 12), Direction.LEFT, RandomGenerator.getDefault());
+        pinky = new Pinky(new GridMap(), new Point(13, 17), Direction.DOWN, RandomGenerator.getDefault());
+        inky = new Inky(new GridMap(), blinky, new Point(15, 17), Direction.DOWN, RandomGenerator.getDefault());
+        clyde = new Clyde(new GridMap(), new Point(13, 18), Direction.UP, RandomGenerator.getDefault());
+
+        gameOrchestrator = new PacmanGameOrchestrator(LevelSettings.forLevel(Lvl.getStage()), blinky, pinky, inky, clyde);
+        pinky.beginHouseBounce(new Point(13, 17));
+        inky.beginHouseBounce(new Point(15, 17));
+        clyde.beginHouseBounce(new Point(13, 18));
+        blinky.spawnAt(120.0, 124.0);
+        pinky.spawnAt(120.0, 148.0);
+        inky.spawnAt(105.0, 148.0);
+        clyde.spawnAt(135.0, 148.0);
+        blinky.pause();
+        pinky.pause();
+        inky.pause();
+        clyde.pause();
 
         ready = createSprite("ui/Ready.png");
         ready.setTranslateY(168);
@@ -83,7 +127,7 @@ public class PacManApp extends GameApplication {
         //intro (musica e pausa o jogador)
         pacman.pause();
         setCanMove(false);
-        setInputBufferDirection("");
+        setInputBufferDirection(Direction.NONE);
         if (Lvl.getStage() == 1 && PacMan.getLives() == 4) {
             play("start.wav");
             runOnce(() -> {
@@ -96,8 +140,6 @@ public class PacManApp extends GameApplication {
                 pacman.resume();
             }, Duration.seconds(2));
         }
-
-        runOnce(() -> {pacman.setDead(true);}, Duration.seconds(20));
 
         switch(Lvl.getStage()) {
             case 1 -> fruit = (byte) 5;
@@ -121,22 +163,22 @@ public class PacManApp extends GameApplication {
     protected void initInput() {
         onKey(KeyCode.RIGHT, () -> {
             if (canMove()) {
-                setInputBufferDirection("RIGHT");
+                setInputBufferDirection(Direction.RIGHT);
             }
         });
         onKey(KeyCode.LEFT, () -> {
             if (canMove()) {
-                setInputBufferDirection("LEFT");
+                setInputBufferDirection(Direction.LEFT);
             }
         });
         onKey(KeyCode.UP, () -> {
             if (canMove()) {
-                setInputBufferDirection("UP");
+                setInputBufferDirection(Direction.UP);
             }
         });
         onKey(KeyCode.DOWN, () -> {
             if (canMove()) {
-                setInputBufferDirection("DOWN");
+                setInputBufferDirection(Direction.DOWN);
             }
         });
     }
@@ -156,6 +198,8 @@ public class PacManApp extends GameApplication {
     protected void onUpdate(double tpf) {
         Debug.updateFps(tpf);
 
+        gameOrchestrator.update(tpf, getPacMan().getPosition(), getPacMan().getCurrentDirection(), Dot.TOTAL - Dot.getConsumed());
+
         if (pacman.hasMovedAfterSpawn() && getGameScene().getUINodes().contains(ready)) {
             getGameScene().removeUINode(ready);
         }
@@ -172,6 +216,30 @@ public class PacManApp extends GameApplication {
 
         if (Dot.getConsumed() == 244) {
             Lvl.win();
+        }
+
+        if (Lvl.getWin() && !winGhostSequenceStarted) {
+            winGhostSequenceStarted = true;
+            blinky.pause();
+            pinky.pause();
+            inky.pause();
+            clyde.pause();
+
+            runOnce(() -> {
+                blinky.setDead();
+                pinky.setDead();
+                inky.setDead();
+                clyde.setDead();
+            }, Duration.seconds(2));
+        }
+
+        if (pacman.isDying() && !blinky.isDead() && !inky.isDead() && !pinky.isDead() && !clyde.isDead()) {
+            runOnce(() -> {
+                blinky.setDead();
+                pinky.setDead();
+                inky.setDead();
+                clyde.setDead();
+            }, Duration.seconds(2));
         }
 
         if (pacman.isDead()) {

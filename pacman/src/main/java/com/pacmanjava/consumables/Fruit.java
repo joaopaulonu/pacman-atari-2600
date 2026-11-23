@@ -32,6 +32,7 @@ public class Fruit extends Consumable {
         entity = entityBuilder()
             .at((posX * 8), (posY * 8) + 4)
             .view(fruits)
+            .zIndex(-100)
             .buildAndAttach();
         
         Lvl.level[21][15] = id;

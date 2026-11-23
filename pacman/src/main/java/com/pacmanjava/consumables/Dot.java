@@ -19,11 +19,9 @@ public class Dot extends Consumable {
     public void consume() {
         super.consume();
 
-        /*
         if (this.id == 4) {
-            onEnergizerEaten();
+            PacManApp.getOrchestrator().onEnergizerEaten();
         }
-        */
 
         if (flip) {
             play("eat_dot_0.wav");

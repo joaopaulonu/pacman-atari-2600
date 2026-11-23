@@ -18,7 +18,7 @@ public class Utils {
 
     private static final int UPSCALE_FACTOR = 10;
     
-    private static String inputBufferDirection = ""; //guarda o input do jogador
+    private static Direction inputBufferDirection = Direction.NONE; //guarda o input do jogador
     private static boolean canMove = false;
 
     public enum Direction {
@@ -38,8 +38,8 @@ public class Utils {
 
         public int y() {
             switch(this) {
-                case UP: return 1;
-                case DOWN: return -1;
+                case UP: return -1;
+                case DOWN: return 1;
                 default: return 0;
             }
         }
@@ -55,10 +55,10 @@ public class Utils {
         }
     }
 
-    public static String getInputBufferDirection() { 
+    public static Direction getInputBufferDirection() { 
         return inputBufferDirection; 
     }
-    public static void setInputBufferDirection(String direction) { 
+    public static void setInputBufferDirection(Direction direction) { 
         inputBufferDirection = direction; 
     }
 
@@ -235,7 +235,7 @@ public class Utils {
             animEyesUp = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(1), 7, 7);
             animEyesDown = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(1), 8, 8);
 
-            animEyesScatter = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(2), 9, 12);
+            animEyesScatter = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(0.75), 9, 12);
 
             animEyesScared1 = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(1), 13, 13);
             animBodyScared1 = new AnimationChannel(spriteSheet, frameCount, scaledFrameSize, scaledFrameSize, Duration.seconds(0.3), 2, 3);

@@ -5,6 +5,14 @@ import com.pacmanjava.utils.Utils.*;
 //Coordenada de tile imutável. Eixo Y cresce para baixo; valores negativos são válidos (alvos fora do mapa).
 public record Point(int x, int y) {
 
+    public int x() {
+        return x;
+    }
+    
+    public int y() {
+        return y;
+    }
+
     public Point plus(Point other) {
         return new Point(x + other.x, y + other.y);
     }
