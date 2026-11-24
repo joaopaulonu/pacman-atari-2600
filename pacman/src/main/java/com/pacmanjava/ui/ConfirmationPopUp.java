@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class ConfirmationPopUp extends DialogFactoryService {
-    @Override
+    //@Override
 public Pane confirmationDialog(String message, Consumer<Boolean> callback) {
     double screenw = FXGL.getAppWidth();
     double screenh = FXGL.getAppHeight();
@@ -73,7 +73,7 @@ public Pane confirmationDialog(String message, Consumer<Boolean> callback) {
         throw new UnsupportedOperationException("Unimplemented method 'choiceDialog'");
     }
 
-    @Override
+    //@Override
     public <T> Pane choiceDialog(String message, List<T> options, Consumer<T> resultCallback) {
         throw new UnsupportedOperationException("Unimplemented method 'choiceDialog'");
     }

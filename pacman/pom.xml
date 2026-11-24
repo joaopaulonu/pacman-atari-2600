@@ -19,12 +19,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <dependency>
     <groupId>com.github.almasb</groupId>
     <artifactId>fxgl</artifactId>
-    <version>25</version>
+    <version>17.3</version>
 </dependency>
 <dependency>
     <groupId>org.jooq</groupId>
     <artifactId>joor</artifactId>
-    <version>0.9.16</version>
+    <version>0.9.15</version>
 </dependency>
 </dependencies>
 
