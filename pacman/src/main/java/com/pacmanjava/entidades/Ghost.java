@@ -44,11 +44,11 @@ public abstract class Ghost extends EntidadeJogo {
     }
     
     /** Tile da casa usado pelos fantasmas ao serem comidos. */
-    public static final Point CLASSIC_HOME_TILE = new Point(15, 17);
+    public static final Point CLASSIC_HOME_TILE = new Point(14, 17);
     /** Tile central da porta da casa dos fantasmas. */
     public static final Point CLASSIC_DOOR_TILE = new Point(14, 16);
     /** Tile imediatamente acima da casa, após cruzar a porta. */
-    public static final Point CLASSIC_EXIT_TILE = new Point(13, 12);
+    public static final Point CLASSIC_EXIT_TILE = new Point(14, 15);
 
     private static final double FULL_SPEED_TILES_PER_SECOND = 75.75 / 8.0;
     private static final double EATEN_SPEED = 1.5;
@@ -319,6 +319,10 @@ public abstract class Ghost extends EntidadeJogo {
         return state;
     }
 
+    public final void setState(GhostState newState) {
+        state = newState;
+    }
+
     public void handleMovement(double tpf, int epf) {
         if (dead || paused) { 
             if (!movedAfterSpawn && PacManApp.getPacMan().hasMovedAfterSpawn()) {
@@ -384,7 +388,7 @@ public abstract class Ghost extends EntidadeJogo {
             }
         }
         
-        if (getPositionTilesX() == PacManApp.getPacMan().getPositionTilesX() && getPositionTilesY() == PacManApp.getPacMan().getPositionTilesY()) {
+        if (Math.abs(posX - PacManApp.getPacMan().posX) <= 4 && Math.abs(posY - PacManApp.getPacMan().posY) <= 4) {
             if (state == GhostState.FRIGHTENED) {
                 eat();
             } else {
@@ -429,9 +433,9 @@ public abstract class Ghost extends EntidadeJogo {
                 return true;
             }
             case HOUSE_ENTER -> {
-                double x = entity.getPosition().getX();
-                double y = entity.getPosition().getY();
-                if (Math.abs(x - 120.0) <= 0.5 && y >= 128.0) {
+                double x = entity.getX();
+                double y = entity.getY();
+                if (Math.abs(x - 120.0) <= 0.5 && y >= 128.0 && y <= 145.0) {
                     entity.setX(120.0);
                     posX = 120;
                     if (y < 144.0) {
@@ -559,44 +563,6 @@ public abstract class Ghost extends EntidadeJogo {
                 return false;
             }
         }
-    }
-
-    private void followHouseRoute(Point tile) {
-        if (houseRoute == null) {
-            return;
-        }
-
-        if (houseRouteIndex < houseRoute.size()
-            && tile.equals(houseRoute.get(houseRouteIndex))) {
-            houseRouteIndex++;
-        }
-
-        if (houseRouteIndex >= houseRoute.size()) {
-            if (state == GhostState.HOUSE_ENTER) {
-                state = GhostState.HOUSE_BOUNCE;
-                currentDirection = tile.y() >= houseBounceMaxY
-                    ? Direction.UP
-                    : Direction.DOWN;
-                bufferDirection = currentDirection;
-            } else if (state == GhostState.HOUSE_EXIT) {
-                state = globalMode;
-                reversePending = false;
-                houseRoute = null;
-            }
-            return;
-        }
-
-        Point next = houseRoute.get(houseRouteIndex);
-        if (next.x() > tile.x()) {
-            currentDirection = Direction.RIGHT;
-        } else if (next.x() < tile.x()) {
-            currentDirection = Direction.LEFT;
-        } else if (next.y() > tile.y()) {
-            currentDirection = Direction.DOWN;
-        } else if (next.y() < tile.y()) {
-            currentDirection = Direction.UP;
-        }
-        bufferDirection = currentDirection;
     }
 
     private void updateSprite() {

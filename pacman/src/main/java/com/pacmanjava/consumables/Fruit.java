@@ -2,6 +2,8 @@ package com.pacmanjava.consumables;
 
 import com.almasb.fxgl.texture.Texture;
 import com.pacmanjava.map.Lvl;
+import com.pacmanjava.score.Pontuacao;
+
 import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
 
@@ -11,6 +13,18 @@ import static com.pacmanjava.utils.Utils.*;
 public class Fruit extends Consumable {
     public void consume() {
         super.consume();
+        
+        switch (id) {
+            case 5 -> Pontuacao.comerFruta(100);
+            case 6 -> Pontuacao.comerFruta(300);
+            case 7 -> Pontuacao.comerFruta(500);
+            case 8 -> Pontuacao.comerFruta(700);
+            case 9 -> Pontuacao.comerFruta(1000);
+            case 10 -> Pontuacao.comerFruta(2000);
+            case 11 -> Pontuacao.comerFruta(3000);
+            case 12 -> Pontuacao.comerFruta(5000);
+        }
+
         Lvl.level[21][14] = 0;
         play("eat_fruit.wav");
     }

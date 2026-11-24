@@ -1,6 +1,8 @@
 package com.pacmanjava.utils;
 
 import com.almasb.fxgl.entity.components.IrremovableComponent;
+import com.pacmanjava.score.Pontuacao;
+
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -21,22 +23,20 @@ public class Debug extends Utils {
             .at(8, 8)
             .view(createSprite("debug tiles.png"))
             .with(new IrremovableComponent())
-            .zIndex(-100)
+            .zIndex(-999)
             .buildAndAttach();
     }
 
     public static void initFpsUI() {
         if (showFps) {
-            Text text = new Text("FPS ");
-            text.setTranslateX(0);
-            text.setTranslateY(10);
-            text.setFill(Color.WHITE);
+            Text text = getUIFactoryService().newText("FPS: ", Color.WHITE, 8);
+            text.setX(176);
+            text.setY(24);
             getGameScene().addUINode(text);
 
-            Text textFPS = new Text();
-            textFPS.setTranslateX(25);
-            textFPS.setTranslateY(10);
-            textFPS.setFill(Color.WHITE);
+            Text textFPS = getUIFactoryService().newText("", Color.WHITE, 8);
+            textFPS.setX(208);
+            textFPS.setY(24);
             textFPS.textProperty().bind(getWorldProperties().intProperty("fps").asString());
             getGameScene().addUINode(textFPS);
         }

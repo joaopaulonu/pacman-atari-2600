@@ -5,10 +5,12 @@ import java.util.List;
 
 import com.pacmanjava.entidades.Ghost;
 import com.pacmanjava.entidades.Ghost.GhostState;
+import com.pacmanjava.entidades.PacMan;
 import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.time.TimerAction;
 import com.pacmanjava.PacManApp;
 import com.pacmanjava.map.Lvl;
+import com.pacmanjava.score.Pontuacao;
 import com.pacmanjava.utils.Utils.Direction;
 
 import javafx.util.Duration;
@@ -63,7 +65,9 @@ public final class PacmanGameOrchestrator {
             return;
         }
 
-        tickFrightened(deltaSeconds);
+        if (!ghosts.get(0).isPaused() && !ghosts.get(1).isPaused() && !ghosts.get(2).isPaused() && !ghosts.get(3).isPaused()) {
+            tickFrightened(deltaSeconds);
+        }
         if (frightenedRemaining == 0) { // o relógio Scatter/Chase pausa durante FRIGHTENED
             advanceSchedule(deltaSeconds);
         }
@@ -94,7 +98,6 @@ public final class PacmanGameOrchestrator {
                     }
 
                     if (g.state() == GhostState.FRIGHTENED || g.isPaused()) {
-                        System.out.println("wat");
                         frightened = true;
                         break;
                     }
@@ -116,9 +119,13 @@ public final class PacmanGameOrchestrator {
         if (!ghosts.contains(ghost)) {
             throw new IllegalArgumentException("fantasma desconhecido");
         }
+
+        Pontuacao.comerFantasma();
         
         eyesSound.getAudio().pause();
         PacManApp.getPacMan().pauseFor(Duration.seconds(1));
+        PacManApp.getPacMan().setInvisibleFor(Duration.seconds(1));
+        ghost.setInvisibleFor(Duration.seconds(1));
         for (Ghost g : ghosts) {
             g.pauseFor(Duration.seconds(1));
         }
@@ -191,6 +198,7 @@ public final class PacmanGameOrchestrator {
 
         if (frightenedRemaining <= 0) {
             frightenedRemaining = 0;
+            Pontuacao.resetarMultiplicadorFantasma();
             ghosts.forEach(Ghost::endFright);
         }
     }
@@ -206,7 +214,7 @@ public final class PacmanGameOrchestrator {
                 }
             }
         }
-        if (!inkyReleased && houseExitElapsed >= 3.0) {
+        if (!inkyReleased && houseExitElapsed >= 4.0) {
             inkyReleased = true;
             for (Ghost ghost : ghosts) {
                 if (ghost instanceof Inky) {
@@ -214,7 +222,7 @@ public final class PacmanGameOrchestrator {
                 }
             }
         }
-        if (!clydeReleased && houseExitElapsed >= 5.0) {
+        if (!clydeReleased && houseExitElapsed >= 10.0) {
             clydeReleased = true;
             for (Ghost ghost : ghosts) {
                 if (ghost instanceof Clyde) {

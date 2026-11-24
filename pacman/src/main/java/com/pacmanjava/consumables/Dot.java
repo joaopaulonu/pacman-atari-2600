@@ -1,7 +1,9 @@
 package com.pacmanjava.consumables;
 
 import com.almasb.fxgl.texture.Texture;
+import com.almasb.fxgl.time.TimerAction;
 import com.pacmanjava.map.Lvl;
+import com.pacmanjava.score.Pontuacao;
 import com.pacmanjava.PacManApp;
 import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
@@ -15,12 +17,16 @@ public class Dot extends Consumable {
     private static int consumed = 0;
     private static boolean flip = true;
     private boolean hide = false;
+    private TimerAction action;
 
     public void consume() {
         super.consume();
 
         if (this.id == 4) {
+            Pontuacao.adicionar(50);
             PacManApp.getOrchestrator().onEnergizerEaten();
+        } else {
+            Pontuacao.adicionar(10);
         }
 
         if (flip) {
@@ -50,7 +56,7 @@ public class Dot extends Consumable {
             dots = texture.subTexture(new Rectangle2D(0, 0, 100, 100));
         } else {
             dots = texture.subTexture(new Rectangle2D(100, 0, 100, 100));
-            getGameTimer().runAtInterval(() -> {
+            action = getGameTimer().runAtInterval(() -> {
                 if (PacManApp.getPacMan() != null && PacManApp.getPacMan().hasMovedAfterSpawn()) {
                     hide = !hide;
                     if (hide) {
@@ -59,6 +65,10 @@ public class Dot extends Consumable {
                         dots.setOpacity(1.0);
                     }
                 } else { dots.setOpacity(1.0); }
+
+                if (Lvl.getWin()) {
+                    action.expire();
+                }
             }, Duration.seconds(0.15));
         }
 

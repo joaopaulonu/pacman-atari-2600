@@ -18,7 +18,6 @@ com\pacmanjava\utils\Utils$GhostSprite.class
 com\pacmanjava\entidades\fantasmas\Pinky.class
 com\pacmanjava\map\Lvl.class
 com\pacmanjava\entidades\fantasmas\Inky.class
-com\pacmanjava\ui\ConfirmationPopUp.class
 com\pacmanjava\utils\Utils.class
 com\pacmanjava\consumables\Dot.class
 com\pacmanjava\PacManApp$1.class
@@ -31,4 +30,5 @@ com\pacmanjava\consumables\Consumable.class
 com\pacmanjava\ui\ResumeGame.class
 com\pacmanjava\entidades\PacMan$1.class
 com\pacmanjava\consumables\Fruit.class
+com\pacmanjava\score\Pontuacao.class
 com\pacmanjava\entidades\fantasmas\GridMap.class

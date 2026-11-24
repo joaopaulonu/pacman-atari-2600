@@ -1,5 +1,6 @@
 package com.pacmanjava;
 
+import com.almasb.fxgl.app.CursorInfo;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
@@ -9,6 +10,7 @@ import com.pacmanjava.consumables.Fruit;
 import com.pacmanjava.entidades.Ghost;
 import com.pacmanjava.entidades.PacMan;
 import com.pacmanjava.map.Lvl;
+import com.pacmanjava.score.Pontuacao;
 import com.pacmanjava.ui.MainMenu;
 import com.pacmanjava.ui.ResumeGame;
 import com.pacmanjava.ui.Loading;
@@ -16,6 +18,7 @@ import com.almasb.fxgl.app.scene.LoadingScene;
 import com.pacmanjava.utils.Debug;
 import com.pacmanjava.utils.Utils.Direction;
 
+import javafx.scene.Cursor;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -65,13 +68,19 @@ public class PacManApp extends GameApplication {
     protected void initSettings(GameSettings settings) {
         settings.setWidth(WIDTH);
         settings.setHeight(HEIGHT);
+        settings.setFontUI("pacmanFont.ttf");
+        settings.setFontGame("pacmanFont.ttf");
+        settings.setFontMono("pacmanFont.ttf");
+        settings.setFontText("pacmanFont.ttf");
         settings.setTitle("Pac-Man");
         settings.setVersion("1.0");
         settings.setManualResizeEnabled(true);
         settings.setPreserveResizeRatio(true);
+        settings.setFullScreenFromStart(true);
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
+        settings.setAppIcon("pacmangame.png");
         settings.setSceneFactory(new SceneFactory() {
             @Override
             public FXGLMenu newMainMenu() {
@@ -128,7 +137,12 @@ public class PacManApp extends GameApplication {
         clyde.pause();
         setCanMove(false);
         setInputBufferDirection(Direction.NONE);
-        if (Lvl.getStage() == 1 && PacMan.getLives() == 4) {
+        if (Lvl.getStage() == 1 && PacMan.getLives() == PacMan.STARTING_LIVES) {
+            pacman.setInvisibleFor(Duration.seconds(1.5));
+            blinky.setInvisibleFor(Duration.seconds(1.5));
+            pinky.setInvisibleFor(Duration.seconds(1.5));
+            inky.setInvisibleFor(Duration.seconds(1.5));
+            clyde.setInvisibleFor(Duration.seconds(1.5));
             play("start.wav");
             runOnce(() -> {
                 setCanMove(true);
@@ -186,17 +200,20 @@ public class PacManApp extends GameApplication {
     @Override
     protected void initUI() {
         Lvl.viewMap();
+        Pontuacao.initScoreBoard();
         Debug.initFpsUI();
     }
 
     @Override
     protected void initGameVars(Map<String, Object> vars) {
         vars.put("fps", 0);
+        vars.put("score", 0);
     }
 
     @Override
     protected void onUpdate(double tpf) {
         Debug.updateFps(tpf);
+        Pontuacao.updateScore();
 
         gameOrchestrator.update(tpf, getPacMan().getPosition(), getPacMan().getCurrentDirection(), Dot.TOTAL - Dot.getConsumed());
 

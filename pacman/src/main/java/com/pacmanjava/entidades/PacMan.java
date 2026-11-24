@@ -7,6 +7,7 @@ import com.pacmanjava.PacManApp;
 import com.pacmanjava.consumables.Consumable;
 import com.pacmanjava.consumables.Dot;
 import com.pacmanjava.map.Lvl;
+import com.pacmanjava.score.Pontuacao;
 import com.pacmanjava.utils.Utils.Direction;
 import com.pacmanjava.utils.Utils.PacmanSprite;
 import com.pacmanjava.entidades.Ghost.GhostState;
@@ -18,11 +19,13 @@ import static com.pacmanjava.utils.Utils.*;
 
 public class PacMan extends EntidadeJogo {
 
+    public static final int STARTING_LIVES = 6;
+
+    private static int lives = 6;
+    private static TimerAction timerAction;
     private boolean dying;
-    private static int lives = 4;
     private float deathAnimationTime = 0;
     private Sound death, siren, siren1, siren2, siren3, siren4;
-    private static TimerAction timerAction;
     private boolean movedAfterSpawn = false;
     public boolean hasMovedAfterSpawn() {
         return movedAfterSpawn;
@@ -31,7 +34,9 @@ public class PacMan extends EntidadeJogo {
         return lives;
     }
     public static void setLives(int l) {
-        lives = l;
+        if (l <= STARTING_LIVES + 1 && l >= 0) {
+            lives = l;
+        }
     }
 
     public boolean isDying() {
@@ -83,7 +88,6 @@ public class PacMan extends EntidadeJogo {
         
         if (timerAction != null) {
             timerAction.expire();
-            timerAction = null;
         }
         
         bufferDirection = Direction.NONE;
@@ -106,14 +110,21 @@ public class PacMan extends EntidadeJogo {
             dead = true;
             movedAfterSpawn = false;
             lives--;
+            playedSiren--;
+            Pontuacao.resetarMultiplicadorFantasma();
             //onPacmanLifeLost()
         }
     }
     
-    private int playedSiren = 0; //se já tocou o audio do alarme
+    private static int playedSiren = 0; //se já tocou o audio do alarme
     private boolean eyespause;
     private void playSiren() {
-        if (!hasMovedAfterSpawn()) { return; }
+        if (!hasMovedAfterSpawn()) { 
+            if (Dot.getConsumed() == 0) {
+                playedSiren = 0;
+            }
+            return; 
+        }
 
         if (timerAction != null) {
             for (Ghost g : PacManApp.getOrchestrator().ghosts()) {
@@ -207,6 +218,7 @@ public class PacMan extends EntidadeJogo {
             if (timerAction != null) {
                 timerAction.expire();
             }
+            playedSiren = 0;
             entity.getComponent(PacmanSprite.class).idle();
             return;
         }

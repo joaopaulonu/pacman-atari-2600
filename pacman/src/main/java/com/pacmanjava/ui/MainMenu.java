@@ -8,6 +8,7 @@ import com.almasb.fxgl.texture.Texture;
 import com.pacmanjava.consumables.Consumable;
 import com.pacmanjava.entidades.PacMan;
 import com.pacmanjava.map.Lvl;
+import com.pacmanjava.score.Pontuacao;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -40,8 +41,10 @@ public class MainMenu extends FXGLMenu {
             @Override
             protected void onActionBegin(Trigger trigger) {
                 Consumable.clearAll(); //limpa os consumables da última sessão (se ainda existem)
+                Pontuacao.resetar();
+                Lvl.setOneup(false);
                 Lvl.setStage(1);
-                PacMan.setLives(4);
+                PacMan.setLives(PacMan.STARTING_LIVES);
                 PacManApp.newGame = true;
                 fireNewGame();
             }

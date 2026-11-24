@@ -4,6 +4,7 @@ import java.util.random.RandomGenerator;
 import javafx.scene.paint.Color;
 
 import com.pacmanjava.entidades.Ghost;
+import com.pacmanjava.utils.Utils.Direction;
 
 import static com.pacmanjava.utils.Utils.*;
 
@@ -24,6 +25,8 @@ public final class Blinky extends Ghost {
 
     @Override
     protected Point scatterTarget(GameContext ctx) {
+        if (elroyPhase(ctx) > 0) { setState(GhostState.CHASE); }
+
         // Elroy ignora o canto de dispersão e continua perseguindo
         return elroyPhase(ctx) > 0 ? ctx.pacmanTile() : scatterCorner();
     }

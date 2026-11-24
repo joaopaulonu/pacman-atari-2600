@@ -19,7 +19,15 @@ public abstract class EntidadeJogo {
     protected Entity entity;
     protected boolean dead = false;
     protected boolean paused = false;
-    protected TimerAction pausedFor;
+    protected TimerAction pausedFor, invisibleFor;
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
 
     public Direction getBufferDirection() {
         return bufferDirection;
@@ -35,6 +43,18 @@ public abstract class EntidadeJogo {
 
     public boolean isPaused() {
         return paused;
+    }
+
+    public void setInvisibleFor(Duration duration) {
+        entity.setVisible(false);
+        
+        if (invisibleFor != null) {
+            invisibleFor.expire();
+        }
+
+        invisibleFor = getGameTimer().runOnceAfter(() -> {
+            entity.setVisible(true);
+        }, duration);
     }
 
     protected int getPositionTilesX() {
