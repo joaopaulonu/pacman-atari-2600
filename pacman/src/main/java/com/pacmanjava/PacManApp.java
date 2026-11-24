@@ -195,6 +195,26 @@ public class PacManApp extends GameApplication {
                 setInputBufferDirection(Direction.DOWN);
             }
         });
+        onKey(KeyCode.D, () -> {
+            if (canMove()) {
+                setInputBufferDirection(Direction.RIGHT);
+            }
+        });
+        onKey(KeyCode.A, () -> {
+            if (canMove()) {
+                setInputBufferDirection(Direction.LEFT);
+            }
+        });
+        onKey(KeyCode.W, () -> {
+            if (canMove()) {
+                setInputBufferDirection(Direction.UP);
+            }
+        });
+        onKey(KeyCode.S, () -> {
+            if (canMove()) {
+                setInputBufferDirection(Direction.DOWN);
+            }
+        });
     }
 
     @Override
