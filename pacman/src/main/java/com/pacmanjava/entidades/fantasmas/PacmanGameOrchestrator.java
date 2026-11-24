@@ -51,6 +51,15 @@ public final class PacmanGameOrchestrator {
             || PacManApp.getPacMan().isDead()
             || PacManApp.getPacMan().isDying()
             || Lvl.getWin()) {
+            if (frightLoop != null) {
+                frightLoop.expire();
+                frightLoop = null;
+            }
+            if (eyesLoop != null) {
+                eyesLoop.expire();
+                eyesLoop = null;
+            }
+
             return;
         }
 
@@ -72,20 +81,20 @@ public final class PacmanGameOrchestrator {
         }
         frightenedRemaining = seconds;
         ghosts.forEach(Ghost::frighten);
-
+        
         if (frightLoop == null) {
-            
             frightSound.getAudio().play();
             frightLoop = getGameTimer().runAtInterval(() -> {
                 boolean eaten = false;
                 boolean frightened = false;
                 for (Ghost g: ghosts) {
-                    if (g.state() == GhostState.EATEN) {
+                    if (g.state() == GhostState.HOUSE_ENTER) {
                         eaten = true;
                         break;
                     }
 
-                    if (g.state() == GhostState.FRIGHTENED) {
+                    if (g.state() == GhostState.FRIGHTENED || g.isPaused()) {
+                        System.out.println("wat");
                         frightened = true;
                         break;
                     }
@@ -93,6 +102,11 @@ public final class PacmanGameOrchestrator {
 
                 if (!eaten && frightened) {           
                     frightSound.getAudio().play();
+                }
+                
+                if (frightenedRemaining == 0) {
+                    frightLoop.expire();
+                    frightLoop = null;
                 }
             }, Duration.millis(1050));
         }
@@ -104,29 +118,40 @@ public final class PacmanGameOrchestrator {
         }
         
         eyesSound.getAudio().pause();
-        play("eat_ghost.wav");
-        PacManApp.getPacMan().pauseFor(Duration.seconds(1.2));
-        
+        PacManApp.getPacMan().pauseFor(Duration.seconds(1));
         for (Ghost g : ghosts) {
-            g.pauseFor(Duration.seconds(1.2));
+            g.pauseFor(Duration.seconds(1));
         }
+        play("eat_ghost.wav");
 
         if (eyesLoop == null) {
-            
-            eyesLoop = getGameTimer().runAtInterval(() -> {
-                boolean eaten = false;
-                for (Ghost g: ghosts) {
-                    if (!g.isPaused() && g.state() == GhostState.EATEN) {
-                        eaten = true;
-                        break;
-                    }
+            runOnce(() -> {
+                if (frightLoop != null) {
+                    frightSound.getAudio().stop();
+                    frightLoop.pause();
                 }
 
-                if (eaten) {    
-                    System.out.println("hi");       
-                    eyesSound.getAudio().play();
-                }
-            }, Duration.millis(600));
+                eyesSound.getAudio().play();
+                eyesLoop = getGameTimer().runAtInterval(() -> {
+                    boolean eaten = false;
+                    for (Ghost g: ghosts) {     
+                        if (g.state() == GhostState.HOUSE_ENTER) {
+                            eaten = true;
+                            break;
+                        }
+                    }
+
+                    if (eaten) {    
+                        eyesSound.getAudio().play();
+                    } else {
+                        if (frightLoop != null && frightLoop.isPaused()) {
+                            frightLoop.resume();
+                        }
+                        eyesLoop.expire();
+                        eyesLoop = null;
+                    }
+                }, Duration.millis(280));
+            }, Duration.seconds(1));
         }
     }
 

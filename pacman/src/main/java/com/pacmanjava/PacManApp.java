@@ -114,18 +114,18 @@ public class PacManApp extends GameApplication {
         pinky.spawnAt(120.0, 148.0);
         inky.spawnAt(105.0, 148.0);
         clyde.spawnAt(135.0, 148.0);
-        blinky.pause();
-        pinky.pause();
-        inky.pause();
-        clyde.pause();
-
+        
         ready = createSprite("ui/Ready.png");
         ready.setTranslateY(168);
         ready.setTranslateX((WIDTH - ready.getFitWidth()) / 2);
         getGameScene().addUINode(ready);
-
+        
         //intro (musica e pausa o jogador)
         pacman.pause();
+        blinky.pause();
+        pinky.pause();
+        inky.pause();
+        clyde.pause();
         setCanMove(false);
         setInputBufferDirection(Direction.NONE);
         if (Lvl.getStage() == 1 && PacMan.getLives() == 4) {

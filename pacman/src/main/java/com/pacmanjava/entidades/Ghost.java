@@ -44,7 +44,7 @@ public abstract class Ghost extends EntidadeJogo {
     }
     
     /** Tile da casa usado pelos fantasmas ao serem comidos. */
-    public static final Point CLASSIC_HOME_TILE = new Point(13, 17);
+    public static final Point CLASSIC_HOME_TILE = new Point(15, 17);
     /** Tile central da porta da casa dos fantasmas. */
     public static final Point CLASSIC_DOOR_TILE = new Point(14, 16);
     /** Tile imediatamente acima da casa, após cruzar a porta. */
@@ -75,6 +75,8 @@ public abstract class Ghost extends EntidadeJogo {
     private double houseExitX = 108.0;
     private java.util.List<Point> houseRoute;
     private int houseRouteIndex;
+
+    private boolean movedAfterSpawn = false;
 
     protected Color color;
 
@@ -318,7 +320,14 @@ public abstract class Ghost extends EntidadeJogo {
     }
 
     public void handleMovement(double tpf, int epf) {
-        if (dead) { return; }
+        if (dead || paused) { 
+            if (!movedAfterSpawn && PacManApp.getPacMan().hasMovedAfterSpawn()) {
+                resume();
+                movedAfterSpawn = true;
+            }
+            
+            return; 
+        }
 
         if (!PacManApp.getPacMan().hasMovedAfterSpawn()
             || PacManApp.getPacMan().isDead()

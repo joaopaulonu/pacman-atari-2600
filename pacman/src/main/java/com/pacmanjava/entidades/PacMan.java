@@ -3,11 +3,14 @@ package com.pacmanjava.entidades;
 import com.almasb.fxgl.audio.Sound;
 import javafx.util.Duration;
 import com.almasb.fxgl.time.TimerAction;
+import com.pacmanjava.PacManApp;
 import com.pacmanjava.consumables.Consumable;
 import com.pacmanjava.consumables.Dot;
 import com.pacmanjava.map.Lvl;
 import com.pacmanjava.utils.Utils.Direction;
 import com.pacmanjava.utils.Utils.PacmanSprite;
+import com.pacmanjava.entidades.Ghost.GhostState;
+import com.pacmanjava.entidades.fantasmas.PacmanGameOrchestrator;
 import com.pacmanjava.entidades.fantasmas.Point;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -79,7 +82,8 @@ public class PacMan extends EntidadeJogo {
         siren.getAudio().stop();
         
         if (timerAction != null) {
-            timerAction.pause();
+            timerAction.expire();
+            timerAction = null;
         }
         
         bufferDirection = Direction.NONE;
@@ -107,9 +111,31 @@ public class PacMan extends EntidadeJogo {
     }
     
     private int playedSiren = 0; //se já tocou o audio do alarme
+    private boolean eyespause;
     private void playSiren() {
-        if (timerAction != null && timerAction.isPaused()) {
-            timerAction.resume();
+        if (!hasMovedAfterSpawn()) { return; }
+
+        if (timerAction != null) {
+            for (Ghost g : PacManApp.getOrchestrator().ghosts()) {
+                if (g.state() == GhostState.HOUSE_ENTER) {
+                    eyespause = true;
+                    break;
+                }
+                eyespause = false;
+            }
+
+            if (PacManApp.getOrchestrator().getFrightenedRemaining() > 0 || eyespause) {
+                if (!timerAction.isPaused()) {
+                    timerAction.pause();
+                    return;
+                }
+            } else {
+                if (timerAction.isPaused()) {
+                    timerAction.resume();
+                }
+            }
+
+            if (timerAction.isPaused()) { return; }
         }
 
         if (Dot.getConsumed() >= 0) {

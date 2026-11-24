@@ -1,6 +1,7 @@
 package com.pacmanjava.entidades;
 
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.time.TimerAction;
 import com.pacmanjava.map.Lvl;
 import com.pacmanjava.utils.Utils.Direction;
 
@@ -18,6 +19,7 @@ public abstract class EntidadeJogo {
     protected Entity entity;
     protected boolean dead = false;
     protected boolean paused = false;
+    protected TimerAction pausedFor;
 
     public Direction getBufferDirection() {
         return bufferDirection;
@@ -111,8 +113,12 @@ public abstract class EntidadeJogo {
 
     public void pauseFor(Duration time) {
         pause();
+        
+        if (pausedFor != null) {
+            pausedFor.expire();
+        }
 
-        getGameTimer().runOnceAfter(() -> {
+        pausedFor = getGameTimer().runOnceAfter(() -> {
             resume();
         }, time);
     }
