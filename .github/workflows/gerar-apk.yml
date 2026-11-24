@@ -1,0 +1,36 @@
+name: Gerar APK Android (FXGL)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ mobile ]
+
+jobs:
+  build-android:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Baixar e configurar Gluon GraalVM (Java 17)
+        run: |
+          wget -q https://github.com/gluonhq/graal/releases/download/gluon-22.1.0.1-Final/graalvm-svm-java17-linux-gluon-22.1.0.1-Final.tar.gz
+          tar -xzf graalvm-svm-java17-linux-gluon-22.1.0.1-Final.tar.gz
+          echo "GRAALVM_HOME=$PWD/graalvm-svm-java17-linux-gluon-22.1.0.1-Final" >> $GITHUB_ENV
+          echo "$PWD/graalvm-svm-java17-linux-gluon-22.1.0.1-Final/bin" >> $GITHUB_PATH
+
+      - name: Compilar e empacotar APK
+        working-directory: pacman
+        env:
+          ANDROID_SDK: ${{ env.ANDROID_HOME }}
+          ANDROID_NDK: ${{ env.ANDROID_NDK_LATEST_HOME }}
+        run: |
+          chmod +x mvnw
+          ./mvnw -Pandroid gluonfx:build gluonfx:package
+
+      - name: Disponibilizar APK para download
+        uses: actions/upload-artifact@v4
+        with:
+          name: pacman-apk
+          path: pacman/target/gluonfx/aarch64-android/gvm/*.apk
