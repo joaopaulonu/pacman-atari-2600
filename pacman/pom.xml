@@ -8,9 +8,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <version>1.0</version>
 
 <properties>
-<!-- Configurado para o Java 27 presente no sistema -->
-<maven.compiler.source>27</maven.compiler.source>
-<maven.compiler.target>27</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <main.class>com.seuprojeto.SeuJogoApp</main.class>
+    <gluonfx.target>host</gluonfx.target>
 </properties>
 
 <dependencies>
@@ -30,13 +32,43 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <plugins>
 <!-- Plugin para rodar a aplicação direto pelo emulador de terminal -->
 <plugin>
-<groupId>org.codehaus.mojo</groupId>
-<artifactId>exec-maven-plugin</artifactId>
-<version>3.1.1</version>
-<configuration>
-<mainClass>com.pacmanjava.PacManApp</mainClass>
-</configuration>
+<groupId>com.gluonhq</groupId>
+    <artifactId>gluonfx-maven-plugin</artifactId>
+    <version>1.0.23</version>
+    <configuration>
+        <target>${gluonfx.target}</target>
+        <mainClass>${main.class}</mainClass>
+        <attachList>
+            <list>display</list>
+            <list>lifecycle</list>
+            <list>statusbar</list>
+            <list>storage</list>
+        </attachList>
+        <reflectionList>
+            <!-- Adicione aqui suas classes de EntityFactory -->
+            <list>com.seuprojeto.SuaEntityFactory</list>
+        </reflectionList>
+        <resourcesList>
+            <list>.*\.png$</list>
+            <list>.*\.jpg$</list>
+            <list>.*\.wav$</list>
+            <list>.*\.mp3$</list>
+            <list>.*\.tmx$</list>
+            <list>.*\.tsx$</list>
+            <list>.*\.json$</list>
+            <list>.*\.ttf$</list>
+        </resourcesList>
+    </configuration>
 </plugin>
 </plugins>
 </build>
+
+<profiles>
+    <profile>
+        <id>android</id>
+        <properties>
+            <gluonfx.target>android</gluonfx.target>
+        </properties>
+    </profile>
+</profiles>
 </project>

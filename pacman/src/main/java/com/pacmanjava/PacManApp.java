@@ -4,6 +4,7 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.dsl.FXGL;
 import com.pacmanjava.consumables.Dot;
 import com.pacmanjava.consumables.Fruit;
 import com.pacmanjava.entidades.Ghost;
@@ -39,6 +40,10 @@ import static com.pacmanjava.utils.Utils.*;
 public class PacManApp extends GameApplication {
     public static boolean newGame = true;
 
+    private double toqueInicioX;
+    private double toqueInicioY;
+    private static final double DISTANCIA_MINIMA_SWIPE = 40;
+
     private static PacMan pacman;
     private static Blinky blinky;
     private static Pinky pinky;
@@ -63,8 +68,8 @@ public class PacManApp extends GameApplication {
 
     @Override
     protected void initSettings(GameSettings settings) {
-        settings.setWidth(WIDTH);
-        settings.setHeight(HEIGHT);
+        //settings.setWidth(WIDTH);
+        //settings.setHeight(HEIGHT);
         settings.setTitle("Pac-Man");
         settings.setVersion("1.0");
         settings.setManualResizeEnabled(true);
@@ -72,6 +77,18 @@ public class PacManApp extends GameApplication {
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
+
+        settings.setWidth(1170);
+        settings.setHeight(540);
+
+        settings.setFullScreenAllowed(true);
+        settings.setFullScreenFromStart(true);
+        settings.setScaleAffectedOnResize(true);
+        settings.setPreserveResizeRatio(true);
+
+        // Mantém a física/lógica estável mesmo com a tela de 120 Hz do S24
+        settings.setTicksPerSecond(60);
+
         settings.setSceneFactory(new SceneFactory() {
             @Override
             public FXGLMenu newMainMenu() {
@@ -161,26 +178,32 @@ public class PacManApp extends GameApplication {
     //adiciona e cria as interações dos controles do jogo
     @Override
     protected void initInput() {
-        onKey(KeyCode.RIGHT, () -> {
-            if (canMove()) {
-                setInputBufferDirection(Direction.RIGHT);
+        var root = FXGL.getGameScene().getRoot();
+
+        root.setOnMousePressed(e -> {
+            toqueInicioX = e.getSceneX();
+            toqueInicioY = e.getSceneY();
+        });
+
+        root.setOnMouseReleased(e -> {
+            double dx = e.getSceneX() - toqueInicioX;
+            double dy = e.getSceneY() - toqueInicioY;
+
+            if (Math.abs(dx) < DISTANCIA_MINIMA_SWIPE && Math.abs(dy) < DISTANCIA_MINIMA_SWIPE) {
+                return;
+            }
+
+            if (Math.abs(dx) > Math.abs(dy)) {
+                aoDeslizar(dx > 0 ? KeyCode.D : KeyCode.A);
+            } else {
+                aoDeslizar(dy > 0 ? KeyCode.S : KeyCode.W);
             }
         });
-        onKey(KeyCode.LEFT, () -> {
-            if (canMove()) {
-                setInputBufferDirection(Direction.LEFT);
-            }
-        });
-        onKey(KeyCode.UP, () -> {
-            if (canMove()) {
-                setInputBufferDirection(Direction.UP);
-            }
-        });
-        onKey(KeyCode.DOWN, () -> {
-            if (canMove()) {
-                setInputBufferDirection(Direction.DOWN);
-            }
-        });
+    }
+
+    private void aoDeslizar(KeyCode direcao) {
+        FXGL.getInput().mockKeyPress(direcao);
+        FXGL.getInput().mockKeyRelease(direcao);
     }
 
     @Override
