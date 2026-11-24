@@ -3,7 +3,7 @@ name: Gerar APK Android (FXGL)
 on:
   workflow_dispatch:
   push:
-    branches: [ mobile ]
+    branches: [ main, mobile ]
 
 jobs:
   build-android:
@@ -13,21 +13,25 @@ jobs:
       - name: Baixar código do repositório
         uses: actions/checkout@v4
 
+      - name: Instalar dependências básicas do Linux
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq gcc g++ zlib1g-dev zip unzip
+
       - name: Baixar e configurar Gluon GraalVM (Java 17)
         run: |
           wget -q https://github.com/gluonhq/graal/releases/download/gluon-22.1.0.1-Final/graalvm-svm-java17-linux-gluon-22.1.0.1-Final.tar.gz
           tar -xzf graalvm-svm-java17-linux-gluon-22.1.0.1-Final.tar.gz
           echo "GRAALVM_HOME=$PWD/graalvm-svm-java17-linux-gluon-22.1.0.1-Final" >> $GITHUB_ENV
+          echo "JAVA_HOME=$PWD/graalvm-svm-java17-linux-gluon-22.1.0.1-Final" >> $GITHUB_ENV
           echo "$PWD/graalvm-svm-java17-linux-gluon-22.1.0.1-Final/bin" >> $GITHUB_PATH
 
       - name: Compilar e empacotar APK
         working-directory: pacman
-        env:
-          ANDROID_SDK: ${{ env.ANDROID_HOME }}
-          ANDROID_NDK: ${{ env.ANDROID_NDK_LATEST_HOME }}
         run: |
+          sed -i 's/\r$//' mvnw
           chmod +x mvnw
-          ./mvnw -Pandroid gluonfx:build gluonfx:package
+          ./mvnw -B -ntp -e -Pandroid gluonfx:build gluonfx:package
 
       - name: Disponibilizar APK para download
         uses: actions/upload-artifact@v4
