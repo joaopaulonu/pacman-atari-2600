@@ -214,7 +214,7 @@ public final class PacmanGameOrchestrator {
                 }
             }
         }
-        if (!inkyReleased && houseExitElapsed >= 4.0) {
+        if (!inkyReleased && houseExitElapsed >= 5.0) {
             inkyReleased = true;
             for (Ghost ghost : ghosts) {
                 if (ghost instanceof Inky) {
