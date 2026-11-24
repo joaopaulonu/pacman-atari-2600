@@ -22,7 +22,7 @@ public class Fruit extends Consumable {
         Texture texture = createSprite("fruits.png");
         Texture fruits;
         
-        fruits = texture.subTexture(new Rectangle2D(0 + (160 * (id - 4)), 0, 160, 160));
+        fruits = texture.subTexture(new Rectangle2D(0 + (160 * (id - 5)), 0, 160, 160));
 
         fruits.setFitHeight(16);
         fruits.setFitWidth(16);
@@ -32,6 +32,7 @@ public class Fruit extends Consumable {
         entity = entityBuilder()
             .at((posX * 8), (posY * 8) + 4)
             .view(fruits)
+            .zIndex(-100)
             .buildAndAttach();
         
         Lvl.level[21][15] = id;

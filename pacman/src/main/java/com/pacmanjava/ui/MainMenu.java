@@ -6,10 +6,13 @@ import com.almasb.fxgl.input.Trigger;
 import com.almasb.fxgl.input.TriggerListener;
 import com.almasb.fxgl.texture.Texture;
 import com.pacmanjava.consumables.Consumable;
+import com.pacmanjava.entidades.PacMan;
 import com.pacmanjava.map.Lvl;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import com.pacmanjava.PacManApp;
 
 import static com.pacmanjava.utils.Utils.*;
 
@@ -38,6 +41,8 @@ public class MainMenu extends FXGLMenu {
             protected void onActionBegin(Trigger trigger) {
                 Consumable.clearAll(); //limpa os consumables da última sessão (se ainda existem)
                 Lvl.setStage(1);
+                PacMan.setLives(4);
+                PacManApp.newGame = true;
                 fireNewGame();
             }
         });

@@ -33,6 +33,14 @@ public class Consumable {
         consumables.clear();
     }
 
+    public static void clearConsumed() {
+        for (Consumable c : consumables) {
+            c.entity.removeFromWorld();
+        }
+
+        consumables.clear();
+    }
+
     //verifica se um byte representa um consumivel
     public static boolean isConsumable(byte id) {
         if (id >= 3 && id <= 12) {

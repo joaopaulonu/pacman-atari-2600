@@ -6,7 +6,7 @@ import com.almasb.fxgl.entity.component.Component;
 //FixedUpdate que só é executada n/s vezes fixa
 //permite manejar cálculos de colisão sém causar inconsisténcias em fps maiores ou menores
 public class FixedUpdateComponent extends Component {
-    private static final double FIXED_TIME_STEP = 0.01;
+    private static final double FIXED_TIME_STEP = 0.005;
 
     private double timer = 0;
     private int epf = 0;

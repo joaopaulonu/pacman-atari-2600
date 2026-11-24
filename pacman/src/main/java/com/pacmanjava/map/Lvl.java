@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import com.pacmanjava.PacManApp;
 import com.pacmanjava.consumables.Consumable;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -16,6 +17,7 @@ import static com.pacmanjava.utils.Utils.*;
 
 public class Lvl {
     private static boolean win = false;
+    private static boolean reset = false;
     private static int stage = 1;
 
     private static boolean stageFlash = true;
@@ -32,7 +34,7 @@ public class Lvl {
                 line = sc.nextLine();
 
                 for (int j = 0; j < WIDTH / 8; j++) {
-                    level[i][j] = Byte.parseByte(String.valueOf(line.charAt(j)));
+                    level[i][j] = Byte.parseByte(String.valueOf(line.charAt(j)), 16);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -40,6 +42,7 @@ public class Lvl {
         }
 
         win = false;
+        reset = false;
     }
 
     //inicializa a imagem do mapa
@@ -49,20 +52,24 @@ public class Lvl {
         mapFlash = map.replaceColor(Color.rgb(0, 26, 255), Color.WHITE);
         mapFlash.setFitHeight(mapFlash.getHeight() / 10);
         mapFlash.setFitWidth(mapFlash.getWidth() / 10);
-
+        
         //cria um quadro preto ao redor do tabuleiro (para esconder o pacman se ele passa por uma fronteira)
         Rectangle rect = new Rectangle(0, 0, WIDTH, HEIGHT);
         rect.setFill(Color.TRANSPARENT);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(16);
-
+        rect.setTranslateZ(999);
+        
         getGameScene().setBackgroundColor(Color.BLACK);
         getGameScene().addUINodes(map, rect);
+
+        reset = false;
     }
     
     public static void win() {
         if (!win) {
             win = true;
+            PacManApp.newGame = true;
             stage++;
             
             runOnce(() -> {
@@ -80,6 +87,18 @@ public class Lvl {
                 Consumable.clearAll();
                 getGameController().startNewGame();
             }, Duration.seconds(4));
+        }
+    }
+
+    public static void restart() {
+        if (!reset) {
+            reset = true;
+            PacManApp.newGame = false;
+
+            runOnce(() -> {
+                Consumable.clearConsumed();
+                getGameController().startNewGame();
+            }, Duration.seconds(1));
         }
     }
 
